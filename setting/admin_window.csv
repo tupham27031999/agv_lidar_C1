@@ -1,0 +1,44 @@
+0	0					0		1	2	3	4	5	6	7	8	
+2	cong_esp32				COM3		115200
+2	window_size				700		# vùng map check
+2	window_size_all			2000
+2	scaling_factor			0.1
+2	rmse1					70
+2	rmse2					50
+2	anpha_scan			360	0	45
+2	anpha_scan_an_toan_tien		45	180	180	315
+2	anpha_scan_an_toan_re_trai	45	100	45	100
+2	anpha_scan_an_toan_re_phai	260	315	260	315
+2	alpha_star_scan_trai		45	180	45	180
+2	alpha_star_scan_phai		180	315	180	315
+2	khoang_cach_duong_di		10
+2	khoang_cach_dich			8
+2	khoang_canh_an_toan_tien	15	20
+2	khoang_cach_tim_duoi_di		15	40
+2	khoang_cach_an_toan_re		15
+2	khoang_cach_astar_scan		60
+2	grid_size				5
+2	agv_size				5
+2	host_lidar				192.168.1.10
+2	port_lidar				2368
+2	########				########
+2	angle_line				100			giam sai so van toc
+2	tien_max				5000
+2	re_max				700
+2	distance_max			80
+2	distan_scan_all			1		10000
+2	dis_min				0
+2	dis_max				1300
+2	cong_lidar				COM5		460800
+2	cong_driver				COM5		115200	
+2	host					0.0.0.0			#172.26.75.208	10.116.3.1	
+2	port					5000	
+2	khoang_cach_dich_min		3		# khoảng cách mà agv cần di chuyển chính xác (tại các điểm có hướng) nhỏ nhất là 2
+2	khoang_cach_dich_max		7		# khoảng cách mà agv cần di chuyển chính xác (tại các điểm không hướng) nhỏ nhất là 2
+2	x_goc0				2500
+2	y_goc0				2500
+2	rotation0				0
+2	kc_them_map				190
+2
+2
+2	

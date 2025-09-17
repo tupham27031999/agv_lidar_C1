@@ -1,0 +1,125 @@
+0	0			0					1			2		3		4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20
+0	name window_main_window		loai_root				w_1950			h_1400		x_1		y_1			bg_white	columnconfigure_1		rowconfigure_1		title_Artwork Differences Detector v1.0		protocol_close_window
+11	name window_frame_atwork	loai_frame			thuoc frame_main_window		shows_1		column_0	row_0		sticky_nsew		padding_3_3_3_3		relief_groove	columnconfigure_100_1	rowconfigure_1
+14
+15	
+16	name window_frame_imgs		loai_frame			thuoc frame_frame_atwork	shows_1		column_0	row_0		rowspan_1			sticky_nsew			borderwidth_3		relief_groove	columnconfigure_1		rowconfigure_1							
+19
+25	name window_imgs_00		loai_frame			thuoc frame_frame_imgs		shows_1		column_0	row_0		sticky_nsew		borderwidth_1		relief_groove	columnconfigure_1		rowconfigure_1										
+2
+20	
+21	name window_frame_left		loai_frame			thuoc frame_frame_atwork	shows_1		column_1	row_0		columnspan_1	sticky_nsew			borderwidth_3		relief_groove	columnconfigure_1		rowconfigure_1_1_1_1_1_70																					
+24
+25	name window_left_01		loai_frame			thuoc frame_frame_left		shows_1		column_0	row_0		sticky_nsew		borderwidth_1		padding_3_3_12_12		relief_groove		columnconfigure_1_10_1	rowconfigure_1_1_1_1_1_1_1_1_1
+29	name window_left_02		loai_frame			thuoc frame_frame_left		shows_1		column_0	row_1		sticky_nsew		borderwidth_1		relief_groove		columnconfigure_1_1_1	rowconfigure_1_1_1_1_1
+29	name window_left_03		loai_frame			thuoc frame_frame_left		shows_1		column_0	row_2		sticky_nsew		borderwidth_1		relief_groove		columnconfigure_1_10_1	rowconfigure_1_1_1_1_1
+29	name window_left_04		loai_frame			thuoc frame_frame_left		shows_1		column_0	row_3		sticky_nsew		borderwidth_1		relief_groove		columnconfigure_1_10_1	rowconfigure_1_1_1_1_1
+33	name window_left_05		loai_frame			thuoc frame_frame_left		shows_1		column_0	row_4		columnspan_7	sticky_nsew			borderwidth_5		relief_groove		columnconfigure_1_10_1	rowconfigure_1_1_1_1											
+38	name window_left_06		loai_frame			thuoc frame_frame_left		shows_1		column_0	row_5		columnspan_1	sticky_nsew			borderwidth_5		relief_groove		columnconfigure_1		rowconfigure_1											
+41
+57
+60	name window_logo1			loai_label			thuoc frame_left_06		shows_1		column_0	row_0		sticky_ns	font_TkDefaultFont	font size_1		fg_black										
+4	name window_logo1_img		loai_img			thuoc frame_left_06_logo1	shows_1
+2
+60	name window_img0			loai_label			thuoc frame_imgs_00		shows_1		column_0	row_0		font_TkDefaultFont	font size_1		fg_black									
+4	name window_img0_img		loai_img			thuoc frame_imgs_00		shows_1
+2
+2		
+63	name window_options		loai_label			thuoc frame_left_01		shows_1		column_0	row_0		font_TkDefaultFont	font size_15		rowspan_1		columnspan_1	sticky_w		text_Options		fg_green				height_1																
+71	name window_cong_com		loai_label			thuoc frame_left_01		shows_1		column_0	row_1		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Chọn cổng COM:		fg_black		anchor_nw																			
+71	name window_bau			loai_label			thuoc frame_left_01		shows_1		column_0	row_2		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Chọn baud rates:		fg_black		anchor_nw																
+71	name window_chon_file		loai_label			thuoc frame_left_01		shows_1		column_0	row_3		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Chọn file:			fg_black		anchor_nw																
+71	name window_chon_address	loai_label			thuoc frame_left_01		shows_1		column_0	row_4		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Chọn address PLC:		fg_black		anchor_nw																
+71	name window_chon_port		loai_label			thuoc frame_left_01		shows_1		column_0	row_5		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Chọn port PLC:		fg_black		anchor_nw																
+65	name window_ds_com		loai_combobox		thuoc frame_left_01		shows_1		column_1	row_1		font_TkDefaultFont	font size_15		sticky_we		state_readonly	stringvar_stringvar1				ds combobox_ds_cong_com		height_2	padx_10	pady_10				
+65	name window_ds_bau		loai_combobox		thuoc frame_left_01		shows_1		column_1	row_2		font_TkDefaultFont	font size_15		sticky_we		state_readonly	stringvar_stringvar2				ds combobox_ds_bau		height_2	padx_10	pady_10				
+85	name window_link_en_1		loai_entry			thuoc frame_left_01		shows_1		column_1	row_3		padx grid_2		pady grid_5	rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont				font size_15			fg_black			relief_groove																
+85	name window_link_en_2		loai_entry			thuoc frame_left_01		shows_1		column_1	row_4		padx grid_2		pady grid_5	rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont				font size_15			fg_black			relief_groove																
+85	name window_link_en_3		loai_entry			thuoc frame_left_01		shows_1		column_1	row_5		padx grid_2		pady grid_5	rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont				font size_15			fg_black			relief_groove																
+121	name window_ba_cham_1		loai_button			thuoc frame_left_01		shows_1		column_2	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_ew		anchor_center			command_ba_cham_1		fg_black	font_TkDefaultFont	font size_8		height_1		relief_groove	text_...		bg_white					
+121	name window_connect_lidar	loai_button			thuoc frame_left_01		shows_1		column_0	row_6		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center			command_connect_lidar		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Connect lidar	width_15	bg_white							
+121	name window_connect_plc		loai_button			thuoc frame_left_01		shows_1		column_1	row_6		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_e		anchor_center			command_connect_plc		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Connect PLC	width_15	bg_white							
+121	name window_reset_lidar		loai_button			thuoc frame_left_01		shows_1		column_0	row_7		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center			command_reset_lidar		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Reset lidar	width_15	bg_white							
+121	name window_save_angle_0	loai_button			thuoc frame_left_01		shows_1		column_1	row_7		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_e		anchor_center			command_save_angle_0		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Save angle	width_15	bg_white							
+2
+65	name window_dieu_khien_agv	loai_label			thuoc frame_left_02		shows_1		column_0	row_0		font_TkDefaultFont	font size_15		rowspan_1		columnspan_1	sticky_w		text_Test điều khiển agv					fg_green		height_1														
+109	name window_variable_1		variable_loai		thuoc frame_left_02		shows_1			
+110	name window_off_dk		loai_radiobutton		thuoc frame_left_02		shows_1		column_0	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black			command_off_dk			font_TkDefaultFont	font size_15				text_OFF			value_1		variable_variable_1													
+110	name window_on_dk			loai_radiobutton		thuoc frame_left_02		shows_1		column_1	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black			command_on_dk			font_TkDefaultFont	font size_15				text_ON			value_2		variable_variable_1	
+121	name window_stop_agv		loai_button			thuoc frame_left_02		shows_1		column_0	row_2		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_ns		anchor_center			command_stop_agv		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Stop	width_10		bg_yellow					
+121	name window_tien			loai_button			thuoc frame_left_02		shows_1		column_1	row_2		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center			command_tien		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Tiến	width_10		bg_white					
+121	name window_trai			loai_button			thuoc frame_left_02		shows_1		column_0	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_ns		anchor_center			command_trai		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Trái	width_10		bg_white							
+121	name window_phai			loai_button			thuoc frame_left_02		shows_1		column_2	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center			command_phai		fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Phải	width_10		bg_white							
+121	name window_lui			loai_button			thuoc frame_left_02		shows_1		column_1	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center			command_lui			fg_black	font_TkDefaultFont	font size_15		height_1		relief_groove	text_Lùi	width_10		bg_white							
+2
+2
+2
+65	name window_data_lidar		loai_label			thuoc frame_left_03		shows_1		column_0	row_0		font_TkDefaultFont	font size_15		rowspan_1		columnspan_1	sticky_w		text_Chế độ lidar		fg_green			height_1														
+71	name window_chon_folder_map	loai_label			thuoc frame_left_03		shows_1		column_0	row_2		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Chọn folder:		fg_black		anchor_nw													
+71	name window_ten_file_map	loai_label			thuoc frame_left_03		shows_1		column_0	row_3		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Tên file save:	fg_black		anchor_nw	
+85	name window_link_en_map1	loai_entry			thuoc frame_left_03		shows_1		column_1	row_2		padx grid_2			pady grid_5			rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont	font size_15		fg_black		relief_groove																
+85	name window_link_en_map2	loai_entry			thuoc frame_left_03		shows_1		column_1	row_3		padx grid_2			pady grid_5			rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont	font size_15		fg_black		relief_groove																
+109	name window_variable_2		variable_loai		thuoc frame_left_03		shows_1
+110	name window_no_update_map	loai_radiobutton		thuoc frame_left_03		shows_1		column_1	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black			command_no_update_map			font_TkDefaultFont	font size_15		text_No update map	value_2		variable_variable_2													
+110	name window_update_map		loai_radiobutton		thuoc frame_left_03		shows_1		column_0	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black			command_update_map			font_TkDefaultFont	font size_15		text_Update map		value_1		variable_variable_2	
+121	name window_ba_cham_map1	loai_button			thuoc frame_left_03		shows_1		column_2	row_2		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_ew		anchor_center				command_ba_cham_map1	fg_black			font_TkDefaultFont	font size_8		height_1			relief_groove	text_...		bg_white						
+121	name window_save_map		loai_button			thuoc frame_left_03		shows_1		column_1	row_4		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_e		anchor_center				command_save_map		fg_black			font_TkDefaultFont	font size_15	height_1			relief_groove	text_Save map	width_15		bg_white						
+2
+2
+2
+65	name window_duong_di		loai_label			thuoc frame_left_04		shows_1		column_0	row_0		font_TkDefaultFont	font size_15		rowspan_1		columnspan_1		sticky_w		text_Chế độ đường đi					fg_green		height_1														
+73	name window_ds_toa_do		loai_entry			thuoc frame_left_04		shows_1		column_1	row_3		font_TkDefaultFont	font size_15		rowspan_1		sticky_ew			fg_black		bg_white			anchor_nw		wraplength_300	height_10
+73	name window_toa_do_dich		loai_entry			thuoc frame_left_04		shows_1		column_1	row_2		font_TkDefaultFont	font size_15		rowspan_1		sticky_ew			fg_black		bg_white			anchor_nw		wraplength_300	height_1
+109	name window_variable_3		variable_loai		thuoc frame_left_04		shows_1
+110	name window_thu_cong		loai_radiobutton		thuoc frame_left_04		shows_1		column_0	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black			command_thu_cong		font_TkDefaultFont	font size_15	text_Thủ công		value_1			variable_variable_3													
+110	name window_tu_dong		loai_radiobutton		thuoc frame_left_04		shows_1		column_1	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black			command_tu_dong		font_TkDefaultFont	font size_15	text_Tự động		value_2			variable_variable_3	
+121	name window_chon_duong_di	loai_button			thuoc frame_left_04		shows_1		column_0	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center		command_chon_duong_di	fg_black		font_TkDefaultFont	font size_15		height_1		relief_groove	text_Chọn đường đi	width_15		bg_white						
+121	name window_chon_dich		loai_button			thuoc frame_left_04		shows_1		column_0	row_2		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center		command_chon_dich		fg_black		font_TkDefaultFont	font size_15		height_1		relief_groove	text_Chọn đích đến	width_15	bg_white
+121	name window_run			loai_button			thuoc frame_left_04		shows_1		column_1	row_5		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_e		anchor_center		command_run			fg_black		font_TkDefaultFont	font size_15		height_1		relief_groove	text_Run	width_15	bg_white
+121	name window_reset_duong_di	loai_button			thuoc frame_left_04		shows_1		column_0	row_5		padx grid_2		pady grid_2		rowspan_1		columnspan_1	sticky_w		anchor_center		command_reset_duong_di	fg_black		font_TkDefaultFont	font size_15		height_1		relief_groove	text_Reset	width_15	bg_white
+2
+2
+68
+69	name window_edit_map		loai_label			thuoc frame_left_05		shows_1		column_0	row_0		font_TkDefaultFont			font size_15	ipadx_20				rowspan_1		columnspan_1		sticky_nsew			text_Edit map	fg_green		anchor_nw		all_label_1														
+109	name window_variable_3		variable_loai		thuoc frame_left_05		shows_1	
+110	name window_circle		loai_radiobutton		thuoc frame_left_05		shows_1		column_0	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black		command_circle	font_TkDefaultFont	font size_15		text_Vẽ điểm		value_1			variable_variable_4													
+110	name window_line			loai_radiobutton		thuoc frame_left_05		shows_1		column_1	row_1		rowspan_1		columnspan_1	sticky_nw		activeforeground_black		command_line	font_TkDefaultFont	font size_15		text_Vẽ đường		value_2			variable_variable_4	
+121	name window_add_map		loai_button			thuoc frame_left_05		shows_1		column_0	row_2		padx grid_2		pady grid_2		rowspan_1		columnspan_1			sticky_w		anchor_center		command_add_map		fg_black			font_TkDefaultFont	font size_15		height_1		relief_groove	text_Thêm map		width_15	bg_white							
+121	name window_del_map		loai_button			thuoc frame_left_05		shows_1		column_1	row_2		padx grid_2		pady grid_2		rowspan_1		columnspan_1			sticky_w		anchor_center		command_del_map		fg_black			font_TkDefaultFont	font size_15		height_1		relief_groove	text_Xóa map		width_15	bg_white							
+121	name window_save_map_edit	loai_button			thuoc frame_left_05		shows_1		column_0	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1			sticky_w		anchor_center		command_save_map_edit	fg_black			font_TkDefaultFont	font size_15		height_1		relief_groove	text_Save map		width_15	bg_white							
+121	name window_new_start_point	loai_button			thuoc frame_left_05		shows_1		column_1	row_3		padx grid_2		pady grid_2		rowspan_1		columnspan_1			sticky_w		anchor_center		command_new_start_point		fg_black			font_TkDefaultFont	font size_15		height_1		relief_groove	text_New start point	width_15	bg_white							
+71	name window_toa_do_x		loai_label			thuoc frame_left_05		shows_1		column_0	row_4		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Tọa độ x:			fg_black		anchor_nw																
+85	name window_gia_tri_x		loai_entry			thuoc frame_left_05		shows_1		column_1	row_4		padx grid_2			pady grid_5			rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont	font size_15			fg_black		relief_groove																
+71	name window_toa_do_y		loai_label			thuoc frame_left_05		shows_1		column_0	row_5		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Tọa độ y:			fg_black		anchor_nw																
+85	name window_gia_tri_y		loai_entry			thuoc frame_left_05		shows_1		column_1	row_5		padx grid_2			pady grid_5			rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont	font size_15			fg_black		relief_groove																
+71	name window_goc_anpha		loai_label			thuoc frame_left_05		shows_1		column_0	row_6		font_TkDefaultFont	font size_15		ipadx_20		rowspan_1		columnspan_1	sticky_nsew			text_Angle:			fg_black		anchor_nw																
+85	name window_gia_tri_angle	loai_entry			thuoc frame_left_05		shows_1		column_1	row_6		padx grid_2			pady grid_5			rowspan_1		columnspan_1	sticky_new		font_TkDefaultFont	font size_15			fg_black		relief_groove																
+121	name window_save_new_point	loai_button			thuoc frame_left_05		shows_1		column_0	row_7		padx grid_2		pady grid_2		rowspan_1		columnspan_1			sticky_w		anchor_center		command_save_new_point	fg_black			font_TkDefaultFont	font size_15		height_1		relief_groove	text_Save point		width_15	bg_white							
+2
+2
+2
+2	name window_menu0			loai_menu		thuoc root_root			thuoc frame_main_window			value cmd_menu0			new item_new_item0	add const value_add
+2	name window_new_item0		loai_new_item	thuoc root_root			thuoc frame_menu0			
+2
+2	name window_File			loai_menu		thuoc root_menu0			thuoc frame_new_item0		value cmd_File			new item_item_file	add const value_add	text_File
+2	name window_item_file		loai_new_item	thuoc root_menu0			thuoc frame_new_item0			
+2
+2	name window_Setting		loai_menu		thuoc root_menu0			thuoc frame_new_item0		value cmd_Setting			new item_item_setting	add const value_add	text_Setting
+2	name window_item_setting	loai_new_item	thuoc root_menu0			thuoc frame_new_item0			
+2
+2	name window_Help			loai_menu		thuoc root_menu0			thuoc frame_new_item0		value cmd_Help							add const value_const	text_Help
+2
+2	name window_update		loai_menu		thuoc root_File			thuoc frame_File			value cmd_update							add const value_const	text_Update		
+2	name window_file_export		loai_menu		thuoc root_File			thuoc frame_File			value cmd_file_export						add const value_const	text_Export		
+2	name window_setting_find_fd	loai_menu		thuoc root_Setting		thuoc frame_Setting		value cmd_setting_find_fd					add const value_const	text_Setting list of find folder
+2
+2
+2
+2
+2
+2
+2
+2
+2
+2
+2

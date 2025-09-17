@@ -1,0 +1,41 @@
+# AGV and PC Communication Settings
+# Cài đặt Giao tiếp AGV và PC
+# Use TAB as a separator for columns.
+# Sử dụng phím TAB để phân tách các cột.
+# Lines starting with # are comments.
+# Các dòng bắt đầu bằng # là chú thích.
+
+# PC Configuration
+# Cấu hình cho PC Hub
+# Key					Value
+1	pc_upstream_listen_host	0.0.0.0		# Địa chỉ IP mà PC Hub lắng nghe tín hiệu từ hệ thống upstream (VD: 0.0.0.0 để lắng nghe trên tất cả các card mạng)
+1	pc_upstream_listen_port	6000			# Cổng mà PC Hub lắng nghe tín hiệu từ hệ thống upstream
+1	pc_hub_ui_host		192.168.119.1	# Địa chỉ IP cho giao diện web của PC Hub (VD: 0.0.0.0 để truy cập từ các máy khác trong mạng)
+1	pc_hub_ui_port		7000			# Cổng cho giao diện web của PC Hub
+
+# Number of AGVs
+# Số lượng AGV
+# Key					Value
+1	num_agvs			1		# Tổng số AGV sẽ giao tiếp với PC Hub
+
+# AGV Details:
+# Thông tin chi tiết của từng AGV:
+# AGV_ID	Label_for_UI	Send_To_AGV_URL (PC POSTs to this AGV's /api/receive_signal)	Get_From_AGV_URL (PC GETs from this AGV's /api/get_signal_to_send)
+# AGV_ID: Mã định danh duy nhất cho AGV.
+# Label_for_UI: Nhãn hiển thị trên giao diện người dùng cho AGV này.
+# Send_To_AGV_URL: Địa chỉ URL đầy đủ mà PC Hub sẽ gửi tín hiệu (POST request) đến API /api/receive_signal_1 của AGV.
+# Get_From_AGV_URL: Địa chỉ URL đầy đủ mà PC Hub sẽ lấy tín hiệu (GET request) từ API /api/get_signal_to_send_1 của AGV.
+# Ensure URLs are correct and accessible from the PC.
+# Đảm bảo các URL này là chính xác và PC Hub có thể truy cập được.
+
+# 	Loại		AGV_ID		UI_Label (Nhãn_hiển_thị)	Send_URL (URL_PC_gửi_cho_AGV)				Get_URL (URL_PC_nhận_từ_AGV)
+1	AGV		AGV001		AGV_Alpha_1				http://172.26.76.151:5000/PC_sent_AGV_1	http://172.26.76.151:5000/AGV_sent_PC_1		# Ví dụ cho AGV 1
+2	AGV		AGV002		AGV_Alpha_2				http://172.26.76.151:5000/PC_sent_AGV_2	http://172.26.76.151:5000/AGV_sent_PC_2		# Ví dụ cho AGV 1
+3	AGV		AGV003		AGV_Alpha_3				http://172.26.76.151:5000/PC_sent_AGV_3	http://172.26.76.151:5000/AGV_sent_PC_3		# Ví dụ cho AGV 1
+
+
+
+# --- Path for PC Hub Logs ---
+# --- Đường dẫn lưu file log của PC Hub ---
+#	Loại		Key				Value
+1	log		pc_log_dir			pc_hub_logs		# Tên thư mục để lưu trữ file log (sẽ được tạo nếu chưa có)

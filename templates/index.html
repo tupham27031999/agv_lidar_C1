@@ -1,0 +1,1186 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-content-wrapper">
+    <div id="openseadragon-viewer" class="image-viewer-container"></div>
+    <div class="controls-container">
+        <div id="controls-1" class="control-panel active">
+            <h3>Bản đồ</h3>
+            <div class="form-group">
+                <label for="map-select">Chọn bản đồ</label>
+                <select id="map-select" class="form-control">
+                    {% for ban_do in danh_sach_ban_do %}
+                    <option value="{{ ban_do }}">{{ ban_do }}</option>
+                    {% endfor %}
+                </select>
+                <button id="upload-map-btn" class="btn-primary">Tải bản đồ</button>
+            </div>
+            <button id="update-map-btn" class="btn-toggle">Cập nhật bản đồ cũ</button>
+
+            <br><hr><br>
+
+            <h3>Tạo bản đồ mới</h3>
+            <button id="create-new-map-btn" class="btn-primary">Tạo bản đồ mới</button>
+            <div class="input-with-button">
+                <input type="text" id="new-map-name-input" class="form-control" placeholder="Tên bản đồ mới">
+                <button id="save-new-map-btn" class="btn-primary">Lưu bản đồ</button>
+            </div>
+            <br><hr><br>
+
+            <h3>Điều khiển thủ công</h3>
+            <button id="manual-control-btn" class="btn-toggle">Điều khiển thủ công</button>
+            <div class="manual-control-group">
+                <div class="control-row">
+                    <button id="btn-forward" class="btn-arrow">▲</button>
+                </div>
+                <div class="control-row">
+                    <button id="btn-turn-left" class="btn-arrow">◀</button>
+                    <button id="btn-backward" class="btn-arrow">▼</button>
+                    <button id="btn-turn-right" class="btn-arrow">▶</button>
+                </div>
+            </div>
+        </div>
+        <div id="controls-2" class="control-panel">
+            <h3>Cài đặt</h3>
+            <div class="form-group">
+                <label for="max-speed-forward">Tiến lớn nhất (m/s)</label>
+                <select id="max-speed-forward" class="form-control">
+                    {% for van_toc in list_van_toc %}
+                    <option value="{{ van_toc }}" {% if van_toc == dict_cai_dat["tien_max"] %}selected{% endif %}>{{ van_toc }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="max-speed-turn">Rẽ lớn nhất (độ/s)</label>
+                <select id="max-speed-turn" class="form-control">
+                    {% for van_toc_re in list_van_toc_re %}
+                    <option value="{{ van_toc_re }}" {% if van_toc_re == dict_cai_dat["re_max"] %}selected{% endif %}>{{ van_toc_re }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button id="update-settings-btn" class="btn-primary">Cập nhật</button>
+        </div>
+        <div id="controls-3" class="control-panel">
+            <h3>Lựa chọn vị trí</h3>
+            <button id="set-current-pos-btn" class="btn-location-select" data-target="vi_tri_agv_hien_tai" data-color="red">Vị trí robot hiện tại của robot</button>
+            <button id="set-start-pos-btn" class="btn-location-select" data-target="vi_tri_bat_dau_lam_viec" data-color="yellow">Vị trí bắt đầu làm việc</button>
+            <button id="set-end-pos-btn" class="btn-location-select" data-target="vi_tri_ket_thuc_lam_viec" data-color="green">Vị trí kết thúc làm việc</button>
+            <button id="set-charge-pos-btn" class="btn-location-select" data-target="vi_tri_sac_agv" data-color="blue">Vị trí sạc của robot</button>
+            
+            <div id="angle-controls" class="angle-controls-group" style="display: none;">
+                <label for="angle-input">Góc:</label>
+                <div class="angle-controls-row">
+                    <button id="btn-angle-left" class="btn-angle">◀</button>
+                    <input type="number" id="angle-input" class="form-control" value="0">
+                    <button id="btn-angle-right" class="btn-angle">▶</button>
+                </div>
+            </div>
+        </div>
+        <div id="controls-4" class="control-panel">
+            <h3>Khu vực làm việc</h3>
+            <div class="form-group">
+                <h4>Tạo khu vực</h4>
+                <button id="create-area-btn">Thêm khu vực làm việc</button>
+            </div>
+            <div class="form-group">
+                <h4>Chỉnh sửa khung</h4>
+                <div class="input-with-button">
+                    <select id="area-select" class="form-control">
+                    </select>
+                </div>
+                <button id="delete-area-btn" class="btn-primary">Xóa</button>
+                <button id="edit-area-btn">Chỉnh sửa khung làm việc</button>
+            </div>
+            <div class="form-group">
+                <h4>Lưu danh sách khu vực</h4>
+                <div class="form-group">
+                    <input type="text" id="new-area-name" class="form-control" placeholder="Tên khu vực mới">
+                    <button id="save-area-btn" class="btn-primary">Lưu khu vực làm việc</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <h4>Mở danh sách khu vực</h4>
+                <div class="form-group">
+                    <select id="area-list-select" class="form-control">
+                        {% for area_list_name in khu_vuc_lam_viec["danh_sach_khu_vuc_mo"] %}
+                        <option value="{{ area_list_name }}">{{ area_list_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="open-area-btn" class="btn-primary">Mở khu vực làm việc</button>
+                </div>
+            </div>
+        </div>
+        <div id="controls-5" class="control-panel">
+            <h3>Chạy robot</h3>
+            <button id="btn-run-stop" class="btn-run">Chạy</button>
+            <button id="btn-finish">Kết thúc</button>
+        </div>
+    </div>
+    <div id="logo-container">
+        <img src="{{ url_for('static', filename='teemo.png') }}" alt="Logo">
+    </div>
+</div>
+
+<script type="text/javascript">
+    let viewer;
+    const bluePointOverlays = [];
+    const redPointOverlays = [];
+    const osdAgvBodyPointOverlays = [];
+    const osdAgvArrowPointOverlays = [];
+    let specialLocationOverlays = {}; // Object to store overlays for special locations
+    let specialLocationOverlays_new = {}
+
+    // Khai báo các biến trạng thái ở đây để có thể truy cập toàn cục
+    let isDrawingMode = false;
+    let rectCount = 0;
+    let activeRect = null;
+    let startPoint = null;
+    let workingAreaOverlays = {}; // Object để lưu trữ các overlay khu vực làm việc
+    let isDraggingOverlay = false; // Biến trạng thái mới để theo dõi việc kéo overlay
+    // Các biến trạng thái mới để quản lý việc kéo thả
+    let isResizingOverlay = false;
+    let activeOverlayElement = null;
+    let startPointOnImage = null;
+
+    let isEditingMode = false;
+    let activeAreaName = null;
+
+    // Thêm các biến trạng thái để xử lý logic 2 bước
+    let activeLocationSelection = null;
+
+    // biến lưu trạng thái tạo bản đồ mới
+    let creat_new_map_btn = 0;
+
+    // Hàm để tính toán góc từ một điểm đến một điểm khác
+    function getAngle(centerPoint, newPoint) {
+        const dx = newPoint.x - centerPoint.x;
+        const dy = newPoint.y - centerPoint.y;
+        let angleDeg = Math.atan2(dy, dx) * 180 / Math.PI;
+        return (angleDeg + 360) % 360; // Đảm bảo góc luôn dương từ 0 đến 360 độ
+    }
+
+    // Hàm để gửi góc mới lên server
+    function updateAngleOnServer(locationType, angle) {
+        fetch('/update_location', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                location_type: locationType,
+                angle: angle,
+                update: 1
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Location angle updated:', data.message);
+            // 🔥 Vẽ lại sau khi server đã cập nhật
+            fetchAndUpdateLocations();
+        })
+        .catch(error => console.error('Error updating angle:', error));
+    }
+    // Hàm này sẽ lấy dữ liệu từ server và cập nhật tất cả các lớp phủ
+    function fetchAndUpdateLocations() {
+        fetch('/get_all_locations')
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    const locationsDict = data.dict_lua_chon_vi_tri;
+                    console.log("locationsDict", locationsDict)
+
+                    const specialPoints = Object.entries(locationsDict).map(([key, loc]) => ({
+                        x: loc.toa_do_x,
+                        y: loc.toa_do_y,
+                        type: key,                // dùng key thay vì loc.vi_tri
+                        color: loc.color,         // sửa lại từ mau_sac → color
+                        angle: loc.goc_agv
+                    }));
+                    console.log("specialPoints", specialPoints)
+                    updateSpecialLocations(specialPoints);
+                } else {
+                    updateSpecialLocations([]); 
+                }
+            })
+            .catch(error => console.error('Error fetching locations:', error));
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        viewer = OpenSeadragon({
+            id: "openseadragon-viewer",
+            prefixUrl: "{{ url_for('static', filename='images/') }}",
+            tileSources: {
+                type: 'image',
+                url:  '{{ url_for("img_none_all") }}'
+            },
+            animationTime: 0.1,
+            blendTime: 0,
+            constrainDuringPan: true,
+            visibilityRatio: 0.5,
+            zoomPerClick: 1.0,
+            maxZoomPixelRatio: 5,
+            zoomPerScroll: 1.2,
+            showNavigator: true,
+            navigatorPosition: "TOP_RIGHT",
+        });
+
+        viewer.addHandler('open', function() {
+            const savedState = sessionStorage.getItem('osdViewerState');
+            if (savedState) {
+                const viewerState = JSON.parse(savedState);
+                viewer.viewport.panTo(new OpenSeadragon.Point(viewerState.center.x, viewerState.center.y), true);
+                viewer.viewport.zoomTo(viewerState.zoom, true);
+            }
+            setInterval(fetchAGVState, 1000);
+            
+            viewer.addHandler('canvas-click', function(event) {
+                if (activeLocationSelection) {
+                    const webPoint = event.position;
+                    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+                    const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
+
+                    if (imagePoint && imagePoint.x >= 0 && imagePoint.y >= 0) {
+                        fetch('/update_location', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                location_type: activeLocationSelection.target,
+                                coords: { x: Math.round(imagePoint.x), y: Math.round(imagePoint.y) },
+                                update: 1
+                            }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Location coordinates updated:', data.message);
+                            fetchAndUpdateLocations(); // Cập nhật ngay lập tức sau khi đặt điểm
+                        })
+                        .catch(error => console.error('Error updating coordinates:', error));
+                    }
+                }
+                
+                if (isDrawingMode) {
+                    const webPoint = event.position;
+                    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+                    const imagePoint = viewer.viewport.viewportToImageCoordinates(viewportPoint);
+
+                    if (imagePoint && imagePoint.x >= 0 && imagePoint.y >= 0) {
+                        rectCount++;
+                        const areaName = `KV ${rectCount}`;
+                        const rect = {
+                            x: Math.round(imagePoint.x),
+                            y: Math.round(imagePoint.y),
+                            width: 100,
+                            height: 100,
+                        };
+                        
+                        // Dòng đã được sửa: Gửi tên và tọa độ riêng biệt
+                        sendAreaUpdate(areaName, rect, 'add');
+                        // isDrawingMode = false;
+                        // createAreaBtn.classList.remove('btn-toggle-blue');
+                    }
+                } else if (isEditingMode && activeAreaName) {
+                    const webPoint = event.position;
+                    const viewportPoint = viewer.viewport.pointFromPixel(webPoint);
+                    const clickPointOnImage = viewer.viewport.viewportToImageCoordinates(viewportPoint);
+
+                    const overlayData = workingAreaOverlays[activeAreaName];
+                    const areaData = overlayData.data;
+
+                    const corners = {
+                        'top-left': { x: areaData.x, y: areaData.y },
+                        'top-right': { x: areaData.x + areaData.width, y: areaData.y },
+                        'bottom-left': { x: areaData.x, y: areaData.y + areaData.height },
+                        'bottom-right': { x: areaData.x + areaData.width, y: areaData.y + areaData.height },
+                    };
+                    
+                    let closestCorner = null;
+                    let minDistance = Infinity;
+
+                    for (const pos in corners) {
+                        const corner = corners[pos];
+                        const dist = Math.sqrt(Math.pow(corner.x - clickPointOnImage.x, 2) + Math.pow(corner.y - clickPointOnImage.y, 2));
+                        if (dist < minDistance) {
+                            minDistance = dist;
+                            closestCorner = pos;
+                        }
+                    }
+                    
+                    let newRect = { ...areaData };
+                    if (closestCorner.includes('right')) {
+                        newRect.width = clickPointOnImage.x - areaData.x;
+                    } else {
+                        newRect.width = areaData.x + areaData.width - clickPointOnImage.x;
+                        newRect.x = clickPointOnImage.x;
+                    }
+
+                    if (closestCorner.includes('bottom')) {
+                        newRect.height = clickPointOnImage.y - areaData.y;
+                    } else {
+                        newRect.height = areaData.y + areaData.height - clickPointOnImage.y;
+                        newRect.y = clickPointOnImage.y;
+                    }
+                    
+                    if (newRect.width < 0) {
+                        newRect.x = newRect.x + newRect.width;
+                        newRect.width = Math.abs(newRect.width);
+                    }
+                    if (newRect.height < 0) {
+                        newRect.y = newRect.y + newRect.height;
+                        newRect.height = Math.abs(newRect.height);
+                    }
+
+                    Object.assign(areaData, newRect);
+                    // Dòng đã được sửa: Gửi tên và tọa độ riêng biệt
+                    sendAreaUpdate(activeAreaName, areaData, 'resize');
+                }
+            });
+        });
+    });
+
+    // --- CÁC HÀM XỬ LÝ LỚP PHỦ VÀ TRẠNG THÁI ---
+    function updateAGVOnMap(bodyCoordsList, arrowCoordsList) {
+        if (!viewer || !viewer.isOpen() || !viewer.world.getItemCount() > 0) return;
+
+        const imageItem = viewer.world.getItemAt(0);
+        if (!imageItem || !imageItem.source || !imageItem.source.dimensions) return;
+
+        osdAgvBodyPointOverlays.forEach(overlayObj => {
+            if (overlayObj && overlayObj.element) {
+                viewer.removeOverlay(overlayObj.element);
+            }
+        });
+        osdAgvBodyPointOverlays.length = 0;
+
+        osdAgvArrowPointOverlays.forEach(overlayObj => {
+            if (overlayObj && overlayObj.element) {
+                viewer.removeOverlay(overlayObj.element);
+            }
+        });
+        osdAgvArrowPointOverlays.length = 0;
+
+        const imageWidth = imageItem.source.dimensions.x;
+        const imageHeight = imageItem.source.dimensions.y;
+        if (imageWidth === 0 || imageHeight === 0) return;
+
+        if (bodyCoordsList && bodyCoordsList.length > 0) {
+            bodyCoordsList.forEach(coords => {
+                const xForOSD = parseFloat(coords[0]) / imageWidth;
+                const yForOSD = parseFloat(coords[1]) / imageHeight;
+                const pointElement = document.createElement("div");
+                pointElement.style.width = "3px";
+                pointElement.style.height = "3px";
+                pointElement.style.backgroundColor = "blue";
+                pointElement.style.borderRadius = "50%";
+                pointElement.style.transform = "translate(-50%, -50%)";
+                viewer.addOverlay({ element: pointElement, location: new OpenSeadragon.Point(xForOSD, yForOSD), placement: OpenSeadragon.Placement.CENTER, checkResize: false });
+                osdAgvBodyPointOverlays.push({ element: pointElement });
+            });
+        }
+
+        if (arrowCoordsList && arrowCoordsList.length > 0) {
+            arrowCoordsList.forEach(coords => {
+                const xForOSD = parseFloat(coords[0]) / imageWidth;
+                const yForOSD = parseFloat(coords[1]) / imageHeight;
+                const pointElement = document.createElement("div");
+                pointElement.style.width = "3px";
+                pointElement.style.height = "3px";
+                pointElement.style.backgroundColor = "red";
+                pointElement.style.borderRadius = "50%";
+                pointElement.style.transform = "translate(-50%, -50%)";
+                viewer.addOverlay({ element: pointElement, location: new OpenSeadragon.Point(xForOSD, yForOSD), placement: OpenSeadragon.Placement.CENTER, checkResize: false });
+                osdAgvArrowPointOverlays.push({ element: pointElement });
+            });
+        }
+    }
+
+    function updateSpecialPoints(pointsArray, colorString, overlayStorageArray) {
+        if (!viewer || !viewer.isOpen()) return;
+
+        overlayStorageArray.forEach(overlayObj => {
+            if (overlayObj && overlayObj.element) {
+                viewer.removeOverlay(overlayObj.element);
+            }
+        });
+        overlayStorageArray.length = 0;
+
+        let imageWidth = 0;
+        let imageHeight = 0;
+        if (viewer.world.getItemCount() > 0) {
+            const tiledImage = viewer.world.getItemAt(0);
+            if (tiledImage && tiledImage.source && tiledImage.source.dimensions) {
+                imageWidth = tiledImage.source.dimensions.x;
+                imageHeight = tiledImage.source.dimensions.y;
+            } else if (tiledImage && tiledImage.source && tiledImage.source.width && tiledImage.source.height) {
+                imageWidth = tiledImage.source.width;
+                imageHeight = tiledImage.source.height;
+            }
+        }
+        if (imageWidth === 0 || imageHeight === 0) return;
+
+        pointsArray.forEach(pointCoords => {
+            const x_pixel = parseFloat(pointCoords[0]);
+            const y_pixel = parseFloat(pointCoords[1]);
+            if (isNaN(x_pixel) || isNaN(y_pixel)) return;
+
+            const x_normalized = x_pixel / imageWidth;
+            const y_normalized = y_pixel / imageHeight;
+            const pointLocation = new OpenSeadragon.Point(x_normalized, y_normalized);
+            const pointElement = document.createElement("div");
+            pointElement.style.width = "5px";
+            pointElement.style.height = "5px";
+            pointElement.style.backgroundColor = colorString;
+            pointElement.style.borderRadius = "50%";
+            pointElement.style.transform = "translate(-50%, -50%)";
+            viewer.addOverlay({ element: pointElement, location: pointLocation, placement: OpenSeadragon.Placement.CENTER });
+            overlayStorageArray.push({ element: pointElement, location: pointLocation });
+        });
+    }
+
+    // Hàm cập nhật các điểm đặc biệt với mũi tên có thể xoay
+    function updateSpecialLocations(pointsArray) {
+        if (!viewer || !viewer.isOpen() || !viewer.world.getItemCount() > 0) return;
+
+        // Xóa tất cả các lớp phủ cũ trước khi vẽ lại
+        for (const type in specialLocationOverlays) {
+            specialLocationOverlays[type].forEach(overlayObj => viewer.removeOverlay(overlayObj.element));
+            delete specialLocationOverlays[type];
+        }
+        specialLocationOverlays = {};
+
+        const imageItem = viewer.world.getItemAt(0);
+        const imageWidth = imageItem.source.dimensions.x;
+        const imageHeight = imageItem.source.dimensions.y;
+        if (imageWidth === 0 || imageHeight === 0) return;
+
+        pointsArray.forEach(pointData => {
+            const x_normalized = pointData.x / imageWidth;
+            const y_normalized = pointData.y / imageHeight;
+            const pointLocation = new OpenSeadragon.Point(x_normalized, y_normalized);
+            const type = pointData.type;
+            const color = pointData.color;
+            const angle = pointData.angle;
+
+            console.log("angle---------", angle)
+
+            const pointElement = document.createElement("div");
+            pointElement.className = "special-location-overlay";
+            pointElement.dataset.locationType = type;
+            pointElement.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+            pointElement.style.position = "absolute";
+            pointElement.style.pointerEvents = "none";
+
+            const pointDot = document.createElement("div");
+            pointDot.style.width = "10px";
+            pointDot.style.height = "10px";
+            pointDot.style.backgroundColor = color;
+            pointDot.style.borderRadius = "50%";
+            pointDot.style.position = "absolute";
+            pointDot.style.top = "50%";
+            pointDot.style.left = "50%";
+            pointDot.style.transform = "translate(-50%, -50%)";
+
+            pointElement.className = "arrow-container";
+            pointElement.style.transform = `translate(-50%, -50%)`;
+            pointElement.style.rotate = `${angle}deg`;
+
+
+            // Tạo mũi tên trước
+            const arrowHead = document.createElement("div");
+            // arrowHead.className = "arrow-head";
+            arrowHead.style.position = "absolute";
+            arrowHead.style.width = "0";
+            arrowHead.style.height = "0";
+            arrowHead.style.borderLeft = "7px solid transparent";
+            arrowHead.style.borderRight = "7px solid transparent";
+            arrowHead.style.borderBottom = `15px solid ${color}`;
+            arrowHead.style.top = "-15px";
+            arrowHead.style.left = "50%";
+            arrowHead.style.transform = "translate(-50%, -50%)";  // 👈 sửa ở đây
+            pointElement.style.transform = `${angle}deg`;
+
+            // Rồi mới append vào pointElement
+            pointElement.appendChild(arrowHead);
+
+            pointElement.appendChild(pointDot);
+
+            const overlay = viewer.addOverlay({
+                element: pointElement,
+                location: pointLocation,
+                placement: OpenSeadragon.Placement.CENTER,
+                checkResize: false
+            });
+
+            if (!specialLocationOverlays[type]) {
+                specialLocationOverlays[type] = [];
+            }
+            specialLocationOverlays[type].push({ element: pointElement, overlay: overlay });
+
+            
+            // Cập nhật giá trị góc trên ô input nếu vị trí này đang được chọn
+            if (activeLocationSelection && activeLocationSelection.target === type) {
+                 document.getElementById('angle-input').value = Math.round(angle);
+            }
+        });
+    }
+
+
+    function fetchAGVState() {
+        fetch('/get_agv_state')
+            .then(response => response.json())
+            .then(data => {
+                if (data.points_blue) {
+                    updateSpecialPoints(data.points_blue, 'blue', bluePointOverlays);
+                }
+                if (data.points_red) {
+                    updateSpecialPoints(data.points_red, 'red', redPointOverlays);
+                }
+                if (data.agv_body_coords && data.agv_arrow_coords) {
+                    updateAGVOnMap(data.agv_body_coords, data.agv_arrow_coords);
+                }
+                if (data.special_points) {
+                    updateSpecialLocations(data.special_points);
+                } else {
+                    // Nếu không có dữ liệu, xóa các lớp phủ cũ
+                    for (const type in specialLocationOverlays) {
+                        specialLocationOverlays[type].forEach(overlayObj => viewer.removeOverlay(overlayObj.element));
+                        delete specialLocationOverlays[type];
+                    }
+                }
+            })
+            .catch(error => console.error('Error fetching AGV state:', error));
+    }
+
+
+    const btnAngleLeft = document.getElementById('btn-angle-left');
+    const btnAngleRight = document.getElementById('btn-angle-right');
+
+    const locationButtons = document.querySelectorAll('.btn-location-select');
+    const angleControlsDiv = document.getElementById('angle-controls');
+    const angleInput = document.getElementById('angle-input');
+
+    locationButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Bỏ active cho tất cả button
+            locationButtons.forEach(btn => btn.classList.remove('btn-active-blue'));
+
+            if (activeLocationSelection && activeLocationSelection.button === this) {
+                // Nếu bấm lại nút đang chọn thì hủy chọn
+                this.classList.remove('btn-active-blue');
+                activeLocationSelection = null;
+                angleControlsDiv.style.display = 'none';
+            } else {
+                // Chọn nút mới
+                this.classList.add('btn-active-blue');
+                activeLocationSelection = {
+                    target: this.dataset.target,
+                    color: this.dataset.color,
+                    button: this
+                };
+                angleControlsDiv.style.display = 'block';
+
+                // Lấy góc hiện tại từ server
+                fetch('/get_all_locations')
+                    .then(res => res.json())
+                    .then(dict => {
+                        if (dict[activeLocationSelection.target]) {
+                            const currentAngle = dict[activeLocationSelection.target].goc_agv;
+                            angleInput.value = Math.round(currentAngle);
+                        } else {
+                            angleInput.value = 0;
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error fetching angle:", err);
+                        angleInput.value = 0;
+                    });
+            }
+        });
+    });
+
+    btnAngleLeft.addEventListener('click', function() {
+        if (activeLocationSelection) {
+            let currentAngle = parseFloat(angleInput.value);
+            currentAngle = (currentAngle - 1 + 360) % 360; // Giảm 1 độ và đảm bảo nằm trong khoảng 0-359
+            angleInput.value = Math.round(currentAngle);
+            updateAngleOnServer(activeLocationSelection.target, currentAngle);
+        }
+    });
+
+    btnAngleRight.addEventListener('click', function() {
+        if (activeLocationSelection) {
+            let currentAngle = parseFloat(angleInput.value);
+            currentAngle = (currentAngle + 1) % 360; // Tăng 1 độ và đảm bảo nằm trong khoảng 0-359
+            angleInput.value = Math.round(currentAngle);
+            updateAngleOnServer(activeLocationSelection.target, currentAngle);
+            // kiểm tra xem có vào không
+            console.log("currentAngle", currentAngle);
+        }
+    });
+
+    angleInput.addEventListener('change', function() {
+        if (activeLocationSelection) {
+            let newAngle = parseFloat(this.value);
+            if (!isNaN(newAngle)) {
+                newAngle = (newAngle + 360) % 360; // Đảm bảo góc hợp lệ
+                this.value = Math.round(newAngle);
+                updateAngleOnServer(activeLocationSelection.target, newAngle);
+            }
+        }
+    });
+
+    
+    // --- LOGIC GIAO DIỆN ---
+    const menuLinks = document.querySelectorAll('#main-menu a');
+    const controlPanels = document.querySelectorAll('.control-panel');
+    const mainWrapper = document.querySelector('.main-content-wrapper');
+
+    function switchPanel(targetId) {
+        menuLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('data-target') === targetId);
+        });
+
+        if (targetId === 'fullscreen') {
+            mainWrapper.classList.add('fullscreen-mode');
+        } else {
+            mainWrapper.classList.remove('fullscreen-mode');
+            controlPanels.forEach(panel => {
+                panel.classList.toggle('active', panel.id === targetId);
+            });
+        }
+    }
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('data-target');
+            switchPanel(targetId);
+        });
+    });
+    switchPanel('controls-1');
+
+    // Cài đặt chung
+    const updateSettingsBtn = document.getElementById('update-settings-btn');
+    if (updateSettingsBtn) {
+        updateSettingsBtn.addEventListener('click', function() {
+            this.classList.add('btn-active-blue');
+            this.disabled = true;
+
+            fetch('/update_setting', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    tien_max: parseFloat(document.getElementById('max-speed-forward').value),
+                    re_max: parseFloat(document.getElementById('max-speed-turn').value),
+                    update: 1 
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Cài đặt đã được cập nhật thành công và cờ đã được đặt.');
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi gửi yêu cầu cập nhật:', error);
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    this.classList.remove('btn-active-blue');
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+    }
+
+    const toggleButtons = document.querySelectorAll('.btn-toggle');
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.toggle('btn-active-blue');
+        });
+    });
+
+    const runStopButton = document.getElementById('btn-run-stop');
+    if (runStopButton) {
+        runStopButton.addEventListener('click', function() {
+            if (this.classList.contains('btn-run')) {
+                this.classList.replace('btn-run', 'btn-stop');
+                this.textContent = 'Dừng';
+            } else {
+                this.classList.replace('btn-stop', 'btn-run');
+                this.textContent = 'Chạy';
+            }
+        });
+    }
+
+    const finishButton = document.getElementById('btn-finish');
+    if (finishButton && runStopButton) {
+        finishButton.addEventListener('click', function() {
+            runStopButton.classList.replace('btn-stop', 'btn-run');
+            runStopButton.textContent = 'Chạy';
+            this.classList.add('btn-active-blue');
+            setTimeout(() => { this.classList.remove('btn-active-blue'); }, 2000);
+        });
+    }
+
+    const saveAreaButton = document.getElementById('btn-save-area');
+    if (saveAreaButton) {
+        saveAreaButton.addEventListener('click', function() {
+            this.classList.add('btn-save-success');
+            setTimeout(() => {
+                this.classList.remove('btn-save-success');
+            }, 2000);
+        });
+    }
+    
+    // --- CÁC HÀM MỚI THEO YÊU CẦU ---
+
+    // 1. Tải bản đồ cũ và cập nhật
+    const uploadBtn = document.getElementById('upload-map-btn');
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', function() {
+            const selectedMap = document.getElementById('map-select').value;
+            this.classList.add('active');
+            this.disabled = true;
+
+            fetch('/update_map_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'load_old_map', map_name: selectedMap }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Server response:', data.message);
+                    viewer.open({
+                        type: 'image',
+                        url:  '{{ url_for("img_none_all") }}?' + new Date().getTime()
+                    });
+                } else {
+                    alert('Lỗi khi tải bản đồ: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi kết nối:', error);
+                alert('Đã xảy ra lỗi kết nối tới server.');
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    uploadBtn.classList.remove('active');
+                    uploadBtn.disabled = false;
+                }, 2000);
+            });
+        });
+    }
+
+    const updateMapBtn = document.getElementById('update-map-btn');
+    if (updateMapBtn) {
+        updateMapBtn.addEventListener('click', function() {
+            const isToggled = this.classList.toggle('btn-active-blue');
+            fetch('/update_map_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update_old_map', status: isToggled ? 1 : 0 }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+            })
+            .catch(error => console.error('Error updating map status:', error));
+        });
+    }
+
+    // 2. Tạo bản đồ mới
+    const createNewMapBtn = document.getElementById('create-new-map-btn');
+    if (createNewMapBtn) {
+        createNewMapBtn.addEventListener('click', function() {
+            // this.classList.add('btn-active-blue');
+            creat_new_map_btn = this.classList.toggle('btn-active-blue');
+            // this.disabled = true;
+            fetch('/update_map_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'create_new_map' , status: creat_new_map_btn ? 1 : 0}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+            })
+            .catch(error => console.error('Error creating new map:', error))
+            .finally(() => {
+                setTimeout(() => {
+                    // this.classList.remove('btn-active-blue');
+                    // this.disabled = false;
+                }, 2000);
+            });
+        });
+    }
+
+    const newMapNameInput = document.getElementById('new-map-name-input');
+    if (newMapNameInput) {
+        newMapNameInput.addEventListener('input', function() {
+            fetch('/update_map_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update_new_map_name', map_name: this.value }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+            })
+            .catch(error => console.error('Error updating new map name:', error));
+        });
+    }
+
+    const saveNewMapBtn = document.getElementById('save-new-map-btn');
+    if (saveNewMapBtn) {
+        saveNewMapBtn.addEventListener('click', function() {
+            const mapName = newMapNameInput.value.trim();
+            if (mapName === "") {
+                alert("Vui lòng nhập tên bản đồ mới.");
+                return;
+            }
+            this.classList.add('btn-active-blue');
+            this.disabled = true;
+            fetch('/update_map_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'save_new_map' }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+                console.log('Map list:', data.map_list);
+                updateMapSelect(data.map_list)
+            })
+            .catch(error => console.error('Error saving new map:', error))
+            .finally(() => {
+                setTimeout(() => {
+                    this.classList.remove('btn-active-blue');
+                    this.disabled = false;
+                    createNewMapBtn.classList.remove('btn-active-blue');
+                }, 2000);
+            });
+        });
+    }
+    // Hàm để cập nhật combobox Bản đồ upload_map
+    function updateMapSelect(mapList) {
+        const mapSelect = document.getElementById('map-select');
+        // Xóa các lựa chọn cũ
+        mapSelect.innerHTML = '';
+        // Thêm các lựa chọn mới từ dữ liệu JSON
+        mapList.forEach(mapName => {
+            const option = document.createElement('option');
+            option.value = mapName;
+            option.textContent = mapName;
+            mapSelect.appendChild(option);
+        });
+        console.log('Combobox bản đồ đã được cập nhật.');
+    }
+
+    // 3. Điều khiển thủ công
+    const manualControlBtn = document.getElementById('manual-control-btn');
+    if (manualControlBtn) {
+        manualControlBtn.addEventListener('click', function() {
+            const isToggled = this.classList.toggle('btn-active-blue');
+            fetch('/update_map_status', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'manual_control', status: isToggled ? 1 : 0 }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+            })
+            .catch(error => console.error('Error toggling manual control:', error));
+        });
+    }
+
+    // --------------------------------------------------------------------------------------------
+    // Thêm logic cho chức năng "Lưu và Mở danh sách khu vực"
+    const openAreaBtn = document.getElementById('open-area-btn');
+    const saveAreaBtn = document.getElementById('save-area-btn');
+    const newAreaNameInput = document.getElementById('new-area-name');
+    const workingAreaSelect = document.getElementById('area-list-select');
+
+    openAreaBtn.addEventListener('click', function() {
+        const areaName = workingAreaSelect.value;
+        if (areaName) {
+            this.classList.add('btn-active-blue');
+            fetch('/open_working_area', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: areaName }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+            })
+            .catch(error => console.error('Error opening area list:', error))
+            .finally(() => {
+                setTimeout(() => {
+                    this.classList.remove('btn-active-blue');
+                }, 2000);
+            });
+        } else {
+            alert('Vui lòng chọn một khu vực làm việc để mở.');
+        }
+    });
+
+    saveAreaBtn.addEventListener('click', function() {
+        const newAreaListName = newAreaNameInput.value.trim();
+        if (newAreaListName) {
+            // Thêm class ngay lập tức khi nút được nhấn
+            this.classList.add('btn-active-blue');
+
+            fetch('/save_working_area', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: newAreaListName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Server response:', data.message);
+            })
+            .catch(error => {
+                console.error('Error saving area list:', error);
+                // Xử lý lỗi nếu cần
+            })
+            .finally(() => {
+                // Xóa class sau 2 giây, bất kể yêu cầu thành công hay thất bại
+                setTimeout(() => {
+                    this.classList.remove('btn-active-blue');
+                }, 2000);
+            });
+        } else {
+            alert('Tên khu vực không được để trống.');
+        }
+    });
+
+    // ------------------ LOGIC MỚI CHO KHU VỰC LÀM VIỆC ------------------
+    const createAreaBtn = document.getElementById('create-area-btn');
+    const deleteAreaBtn = document.getElementById('delete-area-btn');
+    const areaSelect = document.getElementById('area-select');
+    const editAreaBtn = document.getElementById('edit-area-btn');
+
+    // let isDrawingMode = false;
+    // let isEditingMode = false;
+    // let rectCount = 0;
+    // let workingAreaOverlays = {};
+    // let activeAreaName = null;
+
+    // Chế độ thêm khu vực làm việc
+    createAreaBtn.addEventListener('click', function() {
+        // Sử dụng classList.toggle để chuyển đổi trạng thái của nút
+        isDrawingMode = this.classList.toggle('btn-active-blue');
+
+        isEditingMode = false; // Tắt chế độ chỉnh sửa
+        editAreaBtn.classList.remove('btn-active-blue'); // Đặt lại màu cho nút chỉnh sửa
+
+        console.log("creat mode: " + isDrawingMode);
+
+        // if (!isDrawingMode) {
+        //     isDrawingMode = true;
+        //     isEditingMode = false; // Tắt chế độ chỉnh sửa
+        //     editAreaBtn.classList.remove('btn-active-blue'); // Đặt lại màu cho nút chỉnh sửa
+        //     this.classList.add('btn-active-blue');
+        //     console.log("Drawing mode: true");
+        // } else {
+        //     isDrawingMode = false;
+        //     this.classList.remove('btn-active-blue');
+        //     console.log("Drawing mode: false");
+        // }
+    });
+
+    // Chế độ chỉnh sửa khu vực làm việc
+    editAreaBtn.addEventListener('click', function() {
+        // Sử dụng classList.toggle để chuyển đổi trạng thái của nút
+        isEditingMode = this.classList.toggle('btn-active-blue');
+        
+        // Đảm bảo chỉ có một chế độ hoạt động
+        isDrawingMode = false;
+        createAreaBtn.classList.remove('btn-active-blue');
+        
+        console.log("Editing mode: " + isEditingMode);
+    });
+
+    // Lắng nghe sự kiện thay đổi của combobox
+    areaSelect.addEventListener('change', function() {
+        activeAreaName = this.value;
+        updateOverlayStyles();
+    });
+
+    // Cập nhật combobox và các overlay từ dữ liệu server
+    function updateAreaSelectAndOverlays() {
+        fetch('/get_working_areas')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Fetched areas from server:", data.cac_khu_vuc_lam_viec);
+                areaSelect.innerHTML = '';
+                
+                const validAreas = data.cac_khu_vuc_lam_viec.filter(area => area.name);
+
+                if (validAreas.length > 0) {
+                    validAreas.forEach(area => {
+                        const option = document.createElement('option');
+                        option.value = area.name;
+                        option.textContent = area.name;
+                        areaSelect.appendChild(option);
+                    });
+                    areaSelect.value = activeAreaName || validAreas[0].name;
+                    activeAreaName = areaSelect.value;
+                } else {
+                    const option = document.createElement('option');
+                    option.textContent = 'Chưa có khu vực nào';
+                    areaSelect.appendChild(option);
+                    activeAreaName = null;
+                }
+                updateOverlays(validAreas);
+            })
+            .catch(error => console.error('Error fetching working areas:', error));
+    }
+
+    // Hàm cập nhật các overlay trên bản đồ
+    function updateOverlays(serverAreas) {
+        // 1. Xóa toàn bộ các overlay hiện có trên OpenSeadragon viewer
+        for (const name in workingAreaOverlays) {
+            viewer.removeOverlay(workingAreaOverlays[name].element);
+        }
+        // 2. Xóa toàn bộ dữ liệu lưu trữ trên client
+        workingAreaOverlays = {};
+
+        // 3. Tạo lại các overlay từ dữ liệu mới nhất của server
+        serverAreas.forEach(area => {
+            if (!area || !area.name || !area.coords) {
+                console.error("Invalid area data received:", area);
+                return;
+            }
+
+            const element = createAreaElement(area.name);
+            const overlay = viewer.addOverlay({
+                element: element,
+                location: viewer.viewport.imageToViewportRectangle(new OpenSeadragon.Rect(
+                    area.coords.x, area.coords.y, area.coords.width, area.coords.height
+                ))
+            });
+            workingAreaOverlays[area.name] = { element: element, data: area.coords, overlay: overlay };
+        });
+
+        updateOverlayStyles();
+    }
+
+    // Hàm cập nhật kiểu dáng của overlay để làm nổi bật khung đang được chọn
+    function updateOverlayStyles() {
+        for (const name in workingAreaOverlays) {
+            const overlay = workingAreaOverlays[name].element;
+            if (name === activeAreaName) {
+                overlay.classList.add('active-area');
+            } else {
+                overlay.classList.remove('active-area');
+            }
+        }
+    }
+    
+
+    // Xóa khu vực khi nhấn nút
+    deleteAreaBtn.addEventListener('click', function() {
+        const selectedAreaName = areaSelect.value;
+        if (selectedAreaName && selectedAreaName !== 'Chưa có khu vực nào') {
+            fetch('/update_working_area', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'delete', area_name: selectedAreaName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Area deleted:', data.message);
+                    updateAreaSelectAndOverlays();
+                }
+            })
+            .catch(error => console.error('Error deleting area:', error));
+        }
+    });
+
+
+    // Hàm tạo phần tử HTML cho khu vực làm việc
+    function createAreaElement(name) {
+        const element = document.createElement('div');
+        element.className = 'working-area-overlay';
+        element.dataset.areaName = name;
+        
+        const label = document.createElement('div');
+        label.className = 'area-label';
+        label.textContent = name;
+        element.appendChild(label);
+
+        element.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const name = e.currentTarget.dataset.areaName;
+            activeAreaName = name;
+            areaSelect.value = name;
+            updateOverlayStyles();
+        });
+
+        return element;
+    }
+
+    // Gửi dữ liệu khu vực làm việc lên server
+    function sendAreaUpdate(areaName, areaCoords, action) {
+        const dataToSend = {
+            action: action,
+            area: {
+                name: areaName,
+                coords: {
+                    x: Math.round(areaCoords.x),
+                    y: Math.round(areaCoords.y),
+                    width: Math.round(areaCoords.width),
+                    height: Math.round(areaCoords.height)
+                }
+            }
+        };
+
+        fetch('/update_working_area', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataToSend)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || `Server responded with status: ${response.status}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Server response:', data.message);
+        })
+        .catch(error => console.error('Error updating area on server:', error))
+        .finally(() => {
+            updateAreaSelectAndOverlays();
+        });
+    }
+
+    // Lắng nghe sự kiện di chuyển và phóng to/thu nhỏ để cập nhật vị trí overlay
+    viewer.addHandler('viewport-change', function() {
+        for (const name in workingAreaOverlays) {
+            const overlayData = workingAreaOverlays[name];
+            if (overlayData.overlay) {
+                const viewportRect = viewer.viewport.imageToViewportRectangle(new OpenSeadragon.Rect(
+                    overlayData.data.x, overlayData.data.y, overlayData.data.width, overlayData.data.height
+                ));
+                overlayData.overlay.setLocation(viewportRect);
+            }
+        }
+    });
+
+    // Tải các khu vực đã lưu khi trang được tải
+    updateAreaSelectAndOverlays();
+
+
+    
+</script>
+{% endblock %}

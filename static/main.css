@@ -1,0 +1,377 @@
+/* Thiết lập các thuộc tính cơ bản cho toàn bộ trang web (body) */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Body chiếm toàn bộ chiều cao của viewport */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff; /* Màu nền trang */
+    /* Dùng font-size cơ sở để các đơn vị 'rem' được tính toán chính xác */
+    font-size: 16px;
+}
+/* -------------------------------------------------- Tiêu đề -------------------------------------------------------- */
+/* Định dạng cho phần tiêu đề (header) của trang */
+header {
+    background: #333;
+    color: #fff;
+    /* Dùng đơn vị 'em' hoặc 'rem' để padding co giãn theo font-size */
+    padding: 1em;
+    flex-shrink: 0; /* Ngăn header co lại khi nội dung quá nhiều */
+}
+
+/* Định dạng cho thanh điều hướng */
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Định dạng cho khối chứa các liên kết */
+.menu-links a {
+    color: white;
+    /* Dùng đơn vị 'px' cho padding nhỏ, không gây ảnh hưởng lớn đến layout */
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Hiệu ứng khi di chuột vào các liên kết */
+.menu-links a:hover,
+.menu-links a.active {
+    background-color: #575757;
+}
+
+/* Định dạng cho tên phần mềm */
+.software-name {
+    color: white;
+    /* Dùng đơn vị 'rem' để kích thước font co giãn */
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+}
+
+/* -------------------------------------------------- Nội dung chính -------------------------------------------------------- */
+/* Định dạng cho khối chứa nội dung chính (.container) */
+.container {
+    flex-grow: 1; /* Cho phép container lấp đầy không gian còn lại */
+    width: 100%;
+    /* Bỏ margin và padding để nội dung sát với các cạnh */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* Nền trắng đã được loại bỏ, vì các thành phần con đã có nền riêng */
+}
+
+/* Wrapper để chia layout thành 2 cột */
+.main-content-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%; /* Chiếm toàn bộ chiều cao của .container */
+}
+
+/* Khung bên trái chứa ảnh */
+.image-viewer-container {
+    flex: 3; /* Chiếm 3/4 chiều rộng */
+    height: 100%;
+    background-color: #000; /* Nền đen cho viewer */
+    position: relative; /* Cần thiết cho OpenSeadragon */
+}
+
+/* Khung bên phải chứa các nút điều khiển */
+.controls-container {
+    flex: 1; /* Chiếm 1/4 chiều rộng */
+    padding: 20px;
+    background-color: #fff;
+    border-left: 2px solid #eee;
+    box-sizing: border-box; /* Đảm bảo padding không làm tăng kích thước */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung quá dài */
+}
+
+.control-panel h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.control-panel button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.control-panel button:hover {
+    background-color: #e7e7e7;
+}
+
+
+/* Mặc định ẩn các bảng điều khiển */
+.control-panel {
+    display: none;
+}
+
+/* Hiển thị bảng điều khiển đang active */
+.control-panel.active {
+    display: block;
+}
+
+/* Styles cho các thành phần trong form */
+.form-group {
+    margin-bottom: 1.2em; /* Tăng khoảng cách giữa các group */
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5em;
+    color: #333;
+    font-weight: bold;
+}
+
+.form-group select,
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+
+
+.control-panel .btn-active-blue {
+    background-color: #3498db; /* Xanh dương */
+    color: white;
+    border-color: #2980b9;
+}
+
+.control-panel .btn-run {
+    background-color: #2ecc71; /* Xanh lá */
+    color: white;
+    border-color: #27ae60;
+}
+.control-panel .btn-run:hover { background-color: #29b765; }
+
+.control-panel .btn-stop {
+    background-color: #e74c3c; /* Đỏ */
+    color: white;
+    border-color: #c0392b;
+}
+.control-panel .btn-stop:hover { background-color: #d64535; }
+
+/* Khi ở chế độ toàn cảnh, ẩn khung chức năng */
+.main-content-wrapper.fullscreen-mode .controls-container {
+    display: none;
+}
+
+/* Styles cho input và button trên cùng một hàng */
+.input-with-button {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa input và button */
+    margin-bottom: 10px; /* Giữ khoảng cách với phần tử bên dưới */
+}
+
+.input-with-button input {
+    flex-grow: 1; /* Input chiếm phần lớn không gian */
+}
+
+.input-with-button button {
+    width: auto; /* Bỏ ghi đè width: 100% */
+    flex-shrink: 0; /* Ngăn button bị co lại */
+}
+
+.btn-save-success {
+    background-color: #2ecc71; /* Xanh lá */
+    color: white;
+    border-color: #27ae60;
+}
+
+
+
+#drawing-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Rất quan trọng để cho phép OpenSeadragon tương tác bên dưới */
+}
+
+
+#upload-map-btn {
+    /* Đẩy nút về phía bên phải, thẳng hàng với mép phải của container */
+    float: right;
+    /* Đảm bảo nút nằm ở hàng riêng, không bị ảnh hưởng bởi float trước đó */
+    clear: both;
+    /* Khoảng cách với thanh entry phía trên */
+    margin-top: 10px;
+    padding: 8px 16px; /* Chỉnh lại kích thước cho cân đối */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: white;
+    color: #333;
+}
+
+#upload-map-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Lớp CSS để đổi màu nút thành xanh dương khi được nhấn */
+#upload-map-btn.active {
+    background-color: #007bff; /* Màu xanh dương */
+    color: white;
+    border-color: #007bff;
+}
+
+#upload-map-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+
+.manual-control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.control-row {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.btn-arrow {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-arrow:active {
+    background-color: #3498db;
+    color: white;
+}
+
+
+#logo-container {
+    position: absolute;
+    /* Nếu vẫn chưa sát, bạn có thể cần điều chỉnh margin */
+    bottom: 20px; /* Hoặc sử dụng margin âm nếu cần*/
+    right: 20px; 
+}
+
+/* Tùy chọn: Thêm padding cho khung chức năng để không bị chồng lấn */
+.control-panel {
+    position: relative;
+}
+
+#logo-container img {
+    height: 120px;
+}
+
+/* --------------------------------------------------------------------------------*/
+
+/* Styles cho các nút và input điều chỉnh góc */
+.angle-controls-group {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.angle-controls-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-angle {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-angle:hover {
+    background-color: #e7e7e7;
+}
+
+.btn-angle:active {
+    background-color: #ccc;
+}
+
+#angle-input {
+    width: 80px;
+    text-align: center;
+}
+
+
+/* -----------------------------------------------------*/
+/* Thêm CSS cho nút nhấn 'Bôi đen khu vực làm việc' */
+.btn-toggle-blue.active {
+    background-color: #3498db;
+    color: white;
+    border-color: #2980b9;
+}
+
+/* Thêm CSS cho khung vuông làm việc */
+.working-area-overlay {
+    background-color: rgba(52, 152, 219, 0.2); /* Màu xanh dương mờ */
+    border: 2px solid #3498db; /* Viền xanh dương */
+    cursor: move;
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.working-area-overlay .area-label {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: bold;
+    color: #3498db;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    pointer-events: none; /* Quan trọng để không cản trở việc chọn khung */
+}
+
+/* Kiểu cho các điểm điều chỉnh kích thước */
+.resize-handle {
+    width: 10px;
+    height: 10px;
+    background-color: #3498db;
+    border: 1px solid white;
+    position: absolute;
+    z-index: 10;
+}
+
+/* Định vị các điểm điều chỉnh */
+.resize-handle.top-left { top: -5px; left: -5px; cursor: nwse-resize; }
+.resize-handle.top-right { top: -5px; right: -5px; cursor: nesw-resize; }
+.resize-handle.bottom-left { bottom: -5px; left: -5px; cursor: nesw-resize; }
+.resize-handle.bottom-right { bottom: -5px; right: -5px; cursor: nwse-resize; }

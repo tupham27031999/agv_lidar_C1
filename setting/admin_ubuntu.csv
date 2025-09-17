@@ -1,0 +1,36 @@
+0	0					0		1	2	3	4	5	6	7	8	
+2	cong_esp32				COM3		115200
+2	window_size				700
+2	window_size_all			5000
+2	scaling_factor			0.01
+2	rmse1					5
+2	rmse2					3
+2	anpha_scan				45	315
+2	anpha_scan_an_toan_tien		45	180	180	315
+2	anpha_scan_an_toan_re_trai	45	100	45	100
+2	anpha_scan_an_toan_re_phai	260	315	260	315
+2	alpha_star_scan_trai		45	180	45	180
+2	alpha_star_scan_phai		180	315	180	315
+2	khoang_cach_duong_di		10
+2	khoang_cach_dich			8
+2	khoang_canh_an_toan_tien	15	9
+2	khoang_cach_tim_duoi_di		15	40
+2	khoang_cach_an_toan_lui		15
+2	khoang_cach_astar_scan		60
+2	grid_size				5
+2	agv_size				5
+2	angle_line				80
+2	host_lidar				192.168.1.10
+2	port_lidar				2368
+2	######				########
+2	tien_max				3000
+2	re_max				500
+2	distance_max			60
+2	distan_scan_all			0		8000
+2	dis_min				0
+2	dis_max				1000		
+2	cong_lidar				/dev/ttyUSB1	256000
+2	cong_driver				/dev/ttyUSB0	115200	
+2	host					192.168.11.243
+2	port					5000
+2

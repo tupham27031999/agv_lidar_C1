@@ -1,0 +1,77 @@
+/* Media Query cho các thiết bị có chiều rộng màn hình tối đa 768px (điện thoại, máy tính bảng nhỏ) */
+@media (max-width: 1000px) {
+    /* Điều chỉnh kích thước header */
+    header {
+        padding: 0.5rem; /* Giảm khoảng đệm của header */
+    }
+
+    /* Ẩn các liên kết trong thanh điều hướng */
+    .menu-links {
+        display: none;
+    }
+
+    /* Điều chỉnh kích thước font và lề của tên phần mềm */
+    .software-name {
+        font-size: 1rem; /* Giảm kích thước font */
+        margin: auto; /* Căn giữa tên phần mềm */
+    }
+}
+/* Thiết lập các thuộc tính cơ bản cho toàn bộ trang web (body) */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+/* -------------------------------------------------- Tiêu đề -------------------------------------------------------- */
+/* Định dạng cho phần tiêu đề (header) của trang */
+header {
+    background: #333;
+    color: #fff;
+    padding: 1rem;
+}
+
+/* Định dạng cho thanh điều hướng */
+.navigation {
+    /* Sử dụng flexbox để các mục con nằm trên một hàng */
+    display: flex;
+    /* Căn giữa các mục theo chiều dọc */
+    align-items: center;
+    /* Phân bổ khoảng trống giữa các mục con */
+    justify-content: space-between;
+}
+
+/* Định dạng cho khối chứa các liên kết */
+.menu-links a {
+    color: white;
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Hiệu ứng khi di chuột vào các liên kết */
+.menu-links a:hover {
+    background-color: #575757;
+}
+
+/* Định dạng cho tên phần mềm */
+.software-name {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    /* Căn giữa chữ trong khối của nó */
+    text-align: center;
+    /* Tên phần mềm sẽ chiếm toàn bộ không gian còn trống */
+    flex-grow: 1;
+}
+
+/* -------------------------------------------------- Nội dung chính -------------------------------------------------------- */
+/* Định dạng cho khối chứa nội dung chính (.container) */
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+    background: #fff;
+    margin-top: 20px;
+}

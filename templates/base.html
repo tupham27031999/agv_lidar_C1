@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+    <title>Flask App - {{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <!-- <script src="https://openseadragon.github.io/openseadragon/openseadragon.min.js"></script> -->
+    <script src="/static/js/openseadragon.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navigation">
+            <div id="main-menu" class="menu-links">
+                <a href="#" data-target="controls-1">Bản đồ</a>
+                <a href="#" data-target="controls-2">Cài đặt</a>
+                <a href="#" data-target="controls-3">Lựa chọn vị trí</a>
+                <a href="#" data-target="controls-4">Khu vực làm việc</a>
+                <a href="#" data-target="controls-5">Chạy robot</a>
+                <a href="#" data-target="fullscreen">Toàn cảnh</a>
+            </div>
+            <div class="software-name">Tên Phần Mềm</div>
+        </nav>
+    </header>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
