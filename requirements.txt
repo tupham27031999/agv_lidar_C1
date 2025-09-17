@@ -1,0 +1,66 @@
+chỉnh sửa 5 lựa chọn thành tên lần lượt là cài đặt, bản đồ, lựa chọn vị trí, khu vực làm việc, chạy robot
+và khung chức năng sẽ có tên lần lượt là  cài đặt, bản đồ, lựa chọn vị trí, khu vực làm việc, chạy robot tương ứng
+các chứng năng của khung sửa thành như sau
+cài đặt
+	tiến lớn nhất (là thanh combobox tên tiến lớn nhất để lựa chọn lấy từ list_van_toc đơn vị m/s)
+	rẽ lớn nhất (là thanh combobox có tên rẽ lớn nhất để lựa chọn lấy từ list_van_toc_re đơn vị độ/s)
+
+bản đồ
+	chọn bản đồ (là thanh combobox có tên chọn bản đồ để lựa chọn lấy từ danh_sach_ban_do)
+
+lựa chọn vị trí
+	vị trí hiện tại (là nút nhấn có tên là vị trí robot khi nhấn thì có màu xanh dương và khi nhấn lại thì về màu lúc trước)
+	vị trí bắt đầu (là nút nhấn có tên là vị trí bắt đầu khi nhấn thì có màu xanh dương và khi nhấn lại thì về màu lúc trước)
+	vị trí kêt thúc (là nút nhấn có tên là vị trí kết thúc khi nhấn thì có màu xanh dương và khi nhấn lại thì về màu lúc trước)
+
+khu vực làm việc
+	tạo mới (là nút nhấn tạo mới)
+	lựa chọn (là thanh combobox có tên chọn khu vực để lựa chọn lấy từ danh_sach_khu_vuc)
+
+chạy robot
+	chạy/dừng (là nút nhấn ban đầu là màu xanh lá có chữ chạy khi nhấn thì chuyển sang dừng và màu đỏ, và ngược lại)
+	kết thúc (khi nhấn nút này thì nút chạy/dừng sẽ về hiển thị là chạy và màu xanh lá và nút này cũng chuyển màu xanh dương trong 2s và về trạng thái màu ban đầu)
+
+
+tại khung chức năng khu vực làm việc cần thêm 1 thanh entry có tên là tên khu vực ngay bên dưới nút nhấn tạo mới và bên dạnh thanh entry này là nút nhấn save, khi nhấn sẽ chuyển xanh lá trong 2s
+	
+tôi muốn thanh combobox của tiến lớn nhất và rẽ lớn nhất có giá trị ban đầu là giá trị của tien_max và re_max, và khi giá trị trong thanh combobox thay đổi thì giá trị tien_max và re_max thay đổi tương ứng
+
+
+tôi muốn chỉnh sửa khung bản đồ: khung này có các chức năng lấy bản đồ cũ hoặc tạo bản đồ mới và có thể điều khiển agv di chuyển thủ công bằng cách nhấn các phím mũi tên
+1. chức năng lấy bản đồ mới gồm có: thanh combobox chứa các lựa chọn trong danh_sach_ban_do, 1 nút nhấn tải bản đồ, 1 nút nhấn cập nhật bản đồ cũ
+	- khi nhấn nút nhấn tải bản đồ thì dict_ban_do_moi["ten_ban_do_cu"] bằng giá trị của thanh combobox, và dict_ban_do_moi["tai_ban_do_cu"] = 1 và nút nhấn tải bản đồ 
+	chuyển xanh dương trong 2s 
+	- khi nhấn nút nhấn cập nhật bản đồ cũ thì dict_ban_do_moi["cap_nhat_ban_do_cu"] = 1 và chuyển màu xanh dương, khi nhấn lần nữa thì 	dict_ban_do_moi["cap_nhat_ban_do_cu"] = 0 và chuyển về màu ban đầu
+2. chức năng tạo bản đồ mới: gồm nút nhấn tạo bản đồ mới, 1 thành entry để nhập tên bản đồ mới, 1 nút nhấn lưu bản đồ
+	- khi nhấn nút nhấn tạo bản đồ mới thì nút này sẽ chuyển xanh dương trong 2s và đồng thời dict_ban_do_moi["tao_ban_do_moi"] = 1
+	- khi giá trị trong thanh entry thay đổi thì dict_ban_do_moi["ten_ban_do_moi"] = giá trị thanh entry
+	- khi nhấn nút lưu bản đồ thì nút này sẽ chuyển xanh dương trong 2s đồng thời dict_ban_do_moi["luu_ban_do_moi"] = 1 khi giá trị trong thanh entry != ""
+3. chức năng điều khiển thủ công: gồm 1 nút nhấn điều khiển thủ công, 4 mũi tên tiến lùi trái phải sắp xếp mũi tên phù hợp dễ hình dung cho người điều khiển 
+	- khi nhấn nút điều khiển thủ công thì nút này sẽ chuyển xanh dương và dict_ban_do_moi["dieu_khien_thu_cong"] = 1, khi nhấn lại lần nữa thì 	dict_ban_do_moi["dieu_khien_thu_cong"] = 0 và nút này chuyển về màu ban đầu
+	- 4 nút điều khiển tiến lùi trái phải khi được nhấn sẽ chuyển màu xanh dương, không nhấn thì chuyển về màu ban đầu và đồng thời giá trị 	
+	dict_ban_do_moi["tien"], dict_ban_do_moi["lui"], dict_ban_do_moi["trai"], dict_ban_do_moi["phai"] sẽ thay đổi tương ứng
+	
+
+
+
+tại Khung lựa chọn vị trí cần sửa đổi có các chức năng: vị trí hiện tại của robot, vị trí bắt đầu làm việc, vị trí kết thúc làm việc, vị trí sạc của robot
+	- khi nhấn vào nút vị trí hiện tại của robot, nút này sẽ hiển thị màu xanh dương và khi nhấn vào 1 vị trí nào đó ở trong bản đồ thì tọa độ nhấn chuột đó sẽ lưu vào 	dict_lua_chon_vi_tri["vi_tri_agv_hien_tai"]["toa_do_x"], dict_lua_chon_vi_tri["vi_tri_agv_hien_tai"]["toa_do_y"] và đồng thời 	dict_lua_chon_vi_tri["vi_tri_agv_hien_tai"]["update"] = 1 hoặc nếu nhấn nút vị trí hiện tại của robot lần nữa thì nút này về trạng thái ban đầu,
+	nếu giá trị dict_lua_chon_vi_tri["vi_tri_agv_hien_tai"]["update"] = 1 thì sẽ hiển thị 1 điểm màu đỏ và có mũi tên ở vị trí nhấn đó, có thể điều chỉnh hướng mũi tên 	bằng chuột và giá trị góc sẽ lưu vào biến dict_lua_chon_vi_tri["vi_tri_agv_hien_tai"]["goc_agv"]
+	- chức năng vị trí bắt đầu làm việc, vị trí kết thúc làm việc, vị trí sạc của robot có cách thức hoạt động tương tự như nút vị trí hiện tại của robot, nhưng màu sắc 	điểm và mũi tên sẽ khác
+
+tôi muốn tạo 1 server có địa chỉ 10.116.3.1 port 50000 và 1 client có địa chỉ 10.116.3.2 port 50000, với python để test giao tiếp qua nhau
+đầu tiên client sẽ gửi yêu cầu get giá trị địa chỉ url_get = "http://10.116.3.1:50000" về server, khi sever nhận được tín hiệu này thì 1s sau sẽ gửi "ok1"
+khi client nhận được thì 2s sau gửi lại bằng phương thức post đến url_unpause = "http://10.116.3.1:50000/v2/missions-management/skip-action" (không yêu cầu gửi giá trị)
+và tiếp tục 1s sau gửi url_resume = "http://10.116.3.1:50000/v2/missions-management/resume" cũng bằng phương thức port và không yêu cầu giá trị
+
+
+
+
+
+tôi muôn thêm chức năng trong khu vực làm việc: lấy các dùng làm việc trên bản đồ
+	1. trong phần tạo têm khu vực nút nhấn Bôi đen khu vực làm việc khi được nhấn sẽ chuyển màu xanh dương trong 2s và đồng thời sẽ tạo ra 1 khung vuông hình mờ có viền 	trên backgroud, người dùng có thể thao tác điều chỉnh kích thước của khung vuông này, khi nhấn thêm lần nữa thì sẽ tạo thêm 1 khung vuông khác cùng màu có viền người 	dùng vẫn có thể chỉnh sửa cả 2 khung vuông, các khung vuông được đặt thên theo số
+	2. thêm chức năng xóa khung vuông đi, ví dụ tạo 1 thanh combobox có giá trị là tên các ô vuông được cập nhật mỗi khi thêm hoặc bớt ô vuông, 1 nút xóa bên cạnh, khi 	nút này được nhấn sẽ chuyển xanh dương trong 2s và xóa đi khung vuông được combobox chọn
+	3. việc thêm ô vuông, thay đổi kích thước, xóa ô vuông khu vực làm việc sẽ được cập nhật vào biến khu_vuc_lam_viec = {
+    "cac_khu_vuc_lam_viec": []
+}

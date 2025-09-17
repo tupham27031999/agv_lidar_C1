@@ -1,0 +1,9 @@
+web/
+├── app.py
+├── static/
+│   └── main.css
+└── templates/
+    ├── base.html
+    └── index.html
+
+

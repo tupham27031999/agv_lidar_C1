@@ -1,0 +1,24 @@
+chỉnh sửa 5 lựa chọn thành tên lần lượt là cài đặt, bản đồ, lựa chọn vị trí, khu vực làm việc, chạy robot
+và khung chức năng sẽ có tên lần lượt là  cài đặt, bản đồ, lựa chọn vị trí, khu vực làm việc, chạy robot tương ứng
+các chứng năng của khung sửa thành như sau
+cài đặt
+	tiến lớn nhất (là thanh combobox tên tiến lớn nhất để lựa chọn lấy từ list_van_toc đơn vị m/s)
+	rẽ lớn nhất (là thanh combobox có tên rẽ lớn nhất để lựa chọn lấy từ list_van_toc_re đơn vị độ/s)
+
+bản đồ
+	chọn bản đồ (là thanh combobox có tên chọn bản đồ để lựa chọn lấy từ danh_sach_ban_do)
+
+lựa chọn vị trí
+	vị trí hiện tại (là nút nhấn có tên là vị trí robot khi nhấn thì có màu xanh dương và khi nhấn lại thì về màu lúc trước)
+	vị trí bắt đầu (là nút nhấn có tên là vị trí bắt đầu khi nhấn thì có màu xanh dương và khi nhấn lại thì về màu lúc trước)
+	vị trí kêt thúc (là nút nhấn có tên là vị trí kết thúc khi nhấn thì có màu xanh dương và khi nhấn lại thì về màu lúc trước)
+
+khu vực làm việc
+	tạo mới (là nút nhấn tạo mới)
+	lựa chọn (là thanh combobox có tên chọn khu vực để lựa chọn lấy từ danh_sach_khu_vuc)
+
+chạy robot
+	chạy/dừng (là nút nhấn ban đầu là màu xanh lá có chữ chạy khi nhấn thì chuyển sang dừng và màu đỏ, và ngược lại)
+	kết thúc (khi nhấn nút này thì nút chạy/dừng sẽ về hiển thị là chạy và màu xanh lá và nút này cũng chuyển màu xanh dương trong 2s và về trạng thái màu ban đầu)
+	
+
