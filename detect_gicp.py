@@ -67,6 +67,7 @@ def remove_duplicate_points(points, voxel_size=20.0):
     pcd_down = downsample_point_cloud(pcd, voxel_size)
     return np.asarray(pcd_down.points)
 
+
 def remove_dynamic_points(current_points, prev_points, distance_threshold=250.0):
     if prev_points is None or len(prev_points) == 0:
         return current_points 
@@ -168,9 +169,15 @@ def update_occupancy_map(map_all, mask_map_all, points_global, robot_pos, map_ce
     
     robot_x_new = robot_x - x1
     robot_y_new = robot_y - y1
+
+    points_global[:, 0] = map_center_xy[0] + points_global[:, 0] * scaling_factor - x1
+    points_global[:, 1] = map_center_xy[1] - points_global[:, 1] * scaling_factor - y1
+    points_global = remove_duplicate_points(points_global, voxel_size=10)
+    # print(points_global.shape) 10 thì <= 100 diem
+
     for pt in points_global:
-        px = int(map_center_xy[0] + pt[0] * scaling_factor - x1)
-        py = int(map_center_xy[1] - pt[1] * scaling_factor - y1)
+        px = int(pt[0])
+        py = int(pt[1])
 
         if not (0 <= px < width and 0 <= py < height):
             continue
@@ -192,7 +199,7 @@ def update_occupancy_map(map_all, mask_map_all, points_global, robot_pos, map_ce
 
     map_all[y1:y2, x1:x2, :] = map_all_new
     mask_map_all[y1:y2, x1:x2] = mask_map_all_new
-    cv2.imshow("hhh", map_all_new)
+    cv2.imshow("vùng loại bỏ điểm", map_all_new)
     return map_all, mask_map_all
 
 # --- PHẦN 3: CHƯƠNG TRÌNH CHÍNH ---
@@ -200,69 +207,66 @@ def update_occupancy_map(map_all, mask_map_all, points_global, robot_pos, map_ce
 
 class Config:
     def __init__(self):
-        self.ICP_VOXEL_SIZE = 30.0 # hệ số giảm mẫu
+        self.ICP_VOXEL_SIZE = 50.0 # hệ số giảm mẫu
         self.ICP_THRESHOLD = 200.0 # hệ số gicp
         self.global_map = o3d.geometry.PointCloud() # danh sách đám mây điểm gốc
         self.global_pose = np.eye(4) # ma trận tịnh tiến, xoay
         self.first_scan_points = 0 # kiểm tra load map lần đầu
-        self.radius = 10000 # bán kích lấu mẫu trong danh sách điểm gốc
+        self.radius = 8000 # bán kích lấu mẫu trong danh sách điểm gốc (mm), nên lớn hơn tầm quét của Lidar một chút
         self.giam_mau = 1000 # số lượng bắt đầu lấy giảm mẫu
         self.rmse_ok = 0
-    def detect(self, map_all, mask_map_all, global_map, scan_data, MAX_RMSE1_THRESHOLD = 50, MAX_RMSE2_THRESHOLD = 50, scaling_factor = 0.05, update = 1):
+    def detect(self, map_all, mask_map_all, global_map, scan_data, MAX_RMSE1_THRESHOLD = 50, MAX_RMSE2_THRESHOLD = 50, scaling_factor = 0.05, update = 1, show_map_new = 0):
         h, w, _ = map_all.shape
         map_center_xy = [w//2, h//2]
 
-        current_points = scan_data
-        current_points_global = current_points
-        # Chỉ lấy điểm trong bán kính (ví dụ 3000mm quanh robot)
-        robot_xy = self.global_pose[:3, 3]
-        if self.first_scan_points == 0 and update == 1:
-            self.first_scan_points = 1
-            global_map.points.extend(o3d.utility.Vector3dVector(scan_data))
-            map_all, mask_map_all = update_occupancy_map(map_all, mask_map_all, current_points_global, robot_xy, map_center_xy, delta_xy = 1000, scaling_factor = scaling_factor) # thêm vào danh sách điểm gốc
-        
-        map_points_all = np.asarray(global_map.points)
-        map_points_for_icp = self.filter_points_in_radius(map_points_all, robot_xy, radius=self.radius)
-
-
-        # map_for_display = map_all.copy()
-        # tt = time.time()
-        # print("map_points_for_icp.shape", map_points_for_icp.shape)
-        rmse, transformation_matrix = gicp(current_points, map_points_for_icp, self.ICP_THRESHOLD, self.ICP_VOXEL_SIZE, trans_init=self.global_pose)
-        # print(f"ICP RMSE: {rmse:.4f}", time.time() - tt, map_all.shape)
-        # if rmse < 40 and rmse != 0:
-        # if self.rmse_ok < 20:
-        #     self.rmse_ok = self.rmse_ok + 1
-        if rmse <= MAX_RMSE1_THRESHOLD:
-            self.global_pose = transformation_matrix # transformation_matrix đã được cộng dồn sau đó lại cập nhật vào global_pose
-        if rmse <= MAX_RMSE2_THRESHOLD:
-            # Sau khi biến đổi sang tọa độ toàn cục (danh sach điểm vừa mới quét)
-            current_points_global = transform_points(current_points, self.global_pose[:3, :3], self.global_pose[:3, 3])
+        if show_map_new == 1:
+            current_points_global = transform_points(scan_data, self.global_pose[:3, :3], self.global_pose[:3, 3])
+            rmse = 0
+        else:
+            current_points = scan_data
+            current_points_global = current_points
+            # Chỉ lấy điểm trong bán kính (ví dụ 3000mm quanh robot)
+            robot_xy = self.global_pose[:3, 3]
+            if self.first_scan_points == 0 and update == 1:
+                self.first_scan_points = 1
+                global_map.points.extend(o3d.utility.Vector3dVector(scan_data))
+                map_all, mask_map_all = update_occupancy_map(map_all, mask_map_all, current_points_global, robot_xy, map_center_xy, delta_xy = 1000, scaling_factor = scaling_factor) # thêm vào danh sách điểm gốc
             
-            # giảm mẫu thay đổi định dạng điểm đầu vào
-            points_to_add = remove_duplicate_points(current_points_global, voxel_size=self.ICP_VOXEL_SIZE)
-            
-            points_to_add = self.filter_new_points_by_occupancy(points_to_add, mask_map_all, map_center_xy, scaling_factor)
+            map_points_all = np.asarray(global_map.points)
+            map_points_for_icp = self.filter_points_in_radius(map_points_all, robot_xy, radius=self.radius) # lọc những điểm trong bán kính quanh robot
+
+            # [THÊM] Kiểm tra xem có điểm nào để thực hiện ICP không
+            if len(current_points) == 0 or len(map_points_for_icp) == 0:
+                # print("[GICP Detect] Cảnh báo: Dữ liệu quét hiện tại hoặc các điểm trên bản đồ để so khớp đang rỗng. Bỏ qua bước đăng ký.")
+                # Trả về trạng thái hiện tại mà không cập nhật
+                current_points_global = transform_points(current_points, self.global_pose[:3, :3], self.global_pose[:3, 3])
+                return map_all, mask_map_all, global_map, 999.0, current_points_global, self.global_pose[:3, :3], self.global_pose[:3, 3]
+
+            rmse, transformation_matrix = gicp(current_points, map_points_for_icp, self.ICP_THRESHOLD, self.ICP_VOXEL_SIZE, trans_init=self.global_pose)
+            if rmse <= MAX_RMSE1_THRESHOLD:
+                self.global_pose = transformation_matrix # transformation_matrix đã được cộng dồn sau đó lại cập nhật vào global_pose
+            if rmse <= MAX_RMSE2_THRESHOLD:
+                # Sau khi biến đổi sang tọa độ toàn cục (danh sach điểm vừa mới quét)
+                current_points_global = transform_points(current_points, self.global_pose[:3, :3], self.global_pose[:3, 3])
                 
+                if update == 1:
+                    # giảm mẫu thay đổi định dạng điểm đầu vào
+                    points_to_add = remove_duplicate_points(current_points_global, voxel_size=self.ICP_VOXEL_SIZE)
+                    
+                    points_to_add = self.filter_new_points_by_occupancy(points_to_add, mask_map_all, map_center_xy, scaling_factor)
+                        
 
-            if len(points_to_add) > 0: # thêm danh sách điểm vào danh sach điểm gốc
-                global_map.points.extend(o3d.utility.Vector3dVector(points_to_add))
-            if len(global_map.points) > self.giam_mau: # giảm mẫu
-                global_map = downsample_point_cloud(global_map, 50)
+                    if len(points_to_add) > 0: # thêm danh sách điểm vào danh sach điểm gốc
+                        global_map.points.extend(o3d.utility.Vector3dVector(points_to_add))
+                    if len(global_map.points) > self.giam_mau: # giảm mẫu
+                        global_map = downsample_point_cloud(global_map, self.ICP_VOXEL_SIZE)
 
-            robot_pos_map = self.global_pose[:3, 3]  # vị trí của robot trong danh sách điểm gốc
-            # print("robot_pos_map2", robot_pos_map)
-            # hh = time.time()
-            if update == 1:
-                map_all, mask_map_all = update_occupancy_map(map_all, mask_map_all, current_points_global, robot_pos_map, map_center_xy, delta_xy = 260, scaling_factor = scaling_factor) # thêm vào danh sách điểm gốc
-            # print("h-----------h", time.time() - hh)
+                    robot_pos_map = self.global_pose[:3, 3]  # vị trí của robot trong danh sách điểm gốc
 
-            global_map = self.prune_global_map(global_map, mask_map_all, map_center_xy, scaling_factor)
-            # map_for_display = map_all.copy()
+                    map_all, mask_map_all = update_occupancy_map(map_all, mask_map_all, current_points_global.copy(), robot_pos_map, map_center_xy, delta_xy = 400, scaling_factor = scaling_factor) # thêm vào danh sách điểm gốc
 
-            # vẽ lên ảnh map tỷ lệ
-            # self.scan_on_map(map_all, current_points_global, map_center_xy, self.RESOLUTION_MM_PER_PIXEL, color=(0, 255, 0))
-        # cv2.imshow("kkk", map_all)
+                    global_map = self.prune_global_map(global_map, mask_map_all, map_center_xy, scaling_factor)
+
         return map_all, mask_map_all, global_map, rmse, current_points_global, self.global_pose[:3, :3], self.global_pose[:3, 3]
 
 
@@ -273,10 +277,17 @@ class Config:
         center: np.array shape (3,)
         radius: float (mm)
         """
+        if all_points.size == 0:
+            return all_points
+
         deltas = all_points[:, :2] - center[:2]  # chỉ xét x, y
         distances = np.linalg.norm(deltas, axis=1)
+        # distan max của all_points đến center
+        # print("max distance:", np.max(distances)) # max tầm 15000
+
         mask = distances <= radius
         return all_points[mask]
+
     def filter_new_points_by_occupancy(self, points_to_add, occupancy_probs, map_center_px, scaling_factor, free_threshold=0.3):
         """Lọc các điểm mới dựa trên bản đồ chiếm dụng hiện có.
         Loại bỏ các điểm rơi vào các ô được coi là không gian trống để giảm nhiễu.

@@ -57,6 +57,7 @@ elif os.name == "posix":
     print("Hệ điều hành là Ubuntu (Linux)")
     # Đọc file cài đặt cho Ubuntu
     path_admin = path_phan_mem + "/setting/admin_ubuntu.csv"
+path_folder_scan_lidar0 = path_phan_mem + "/data_input_output/scan_data_0"
 path_folder_scan_lidar1 = path_phan_mem + "/data_input_output/scan_data_1"
 path_folder_scan_lidar2 = path_phan_mem + "/data_input_output/scan_data_2"
 path_folder_scan_lidar3 = path_phan_mem + "/data_input_output/scan_data_3"
@@ -162,7 +163,7 @@ class support_main:
         self.input_rect = (50, 70, 300, 30) # x, y, w, h for text input box
         self.save_button_rect = (150, 130, 100, 40) 
 
-        self.kiem_tra_connect = {"lidar": "on", "driver_motor": "off", "esp32": "off", "process_lidar": "on"}
+        self.kiem_tra_connect = {"lidar": "off", "driver_motor": "off", "esp32": "off", "process_lidar": "on"}
 
         self.img = np.zeros((self.window_size,self.window_size,3), np.uint8)
         self.map_all = np.zeros((self.window_size,self.window_size,3), np.uint8)
@@ -207,61 +208,45 @@ class support_main:
 
     def main_loop(self):
 
-
+        list_data0 = os.listdir(path_folder_scan_lidar0)
         list_data1 = os.listdir(path_folder_scan_lidar1)
         list_data2 = os.listdir(path_folder_scan_lidar2)
         list_data3 = os.listdir(path_folder_scan_lidar3)
-        if self.kiem_tra_connect["lidar"] == "off":
-            # if self.stt_scan < len(list_data1) and self.stt_scan < len(list_data2):
-            #     scan_alpha_1 = np.load(path_folder_scan_lidar1 + "/scan_"+ str(self.stt_scan) +".npy")
-            #     scan_alpha_2 = np.load(path_folder_scan_lidar2 + "/scan_"+ str(self.stt_scan) +".npy")
-            #     # self.stt_scan = self.stt_scan + 1
-            #     self.stt_scan = 5
-            # else:
-            #     self.connect_while = False
-            #     self.stt_scan = self.stt_scan - 1
-            #     scan_alpha_1 = np.load(path_folder_scan_lidar1 + "/scan_"+ str(self.stt_scan) +".npy")
-            #     scan_alpha_2 = np.load(path_folder_scan_lidar2 + "/scan_"+ str(self.stt_scan) +".npy")
-            
-            if self.stt_scan < len(list_data3):
-                scan_alpha_1 = np.load(path_folder_scan_lidar1 + "/Scan_data_"+ str(self.stt_scan) +".npy")
+        if self.kiem_tra_connect["lidar"] == "on":
+            scan_alpha_1, _ = self.load_data_lidar()
+            scan_xy, scan1, scan2 = convert_2_lidar.convert_scan_lidar(scan1_data_example=scan_alpha_1, 
+                                                                        scan2_data_example=scan_alpha_1, 
+                                                                        scaling_factor = 1,
+                                                                        lidar1_orient_deg = 0,
+                                                                        lidar2_orient_deg = 0,
+                                                                        agv_w=0,
+                                                                        agv_l=0)
+            # print(scan_xy)
+
+            # save_scan_to_npy(scan_alpha_1, "scan_" + str(self.stt_scan), path_folder_scan_data_0)
+
+            # save_scan_to_npy(scan_alpha_1, "scan_" + str(self.stt_scan), path_folder_scan_data_1)
+
+            # self.stt_scan = self.stt_scan + 1
+        else:
+            if self.stt_scan < len(list_data0):
+                scan_alpha = np.load(path_folder_scan_data_0 + "/scan_"+ str(self.stt_scan) +".npy")
                 self.stt_scan = self.stt_scan + 1
-                # self.stt_scan = 5
+                # self.stt_scan = 500
             else:
                 self.connect_while = False
                 self.stt_scan = self.stt_scan - 1
-                scan_alpha_1 = np.load(path_folder_scan_lidar1 + "/Scan_data_"+ str(self.stt_scan) +".npy")
-        else:
-            scan_alpha_1, _ = self.load_data_lidar()
-            # print(scan_alpha_1)
+                scan_alpha = np.load(path_folder_scan_data_0 + "/scan_"+ str(self.stt_scan) +".npy")
 
-        # scan_xy, scan1, scan2 = convert_2_lidar.convert_scan_lidar(scan1_data_example=scan_alpha_1, 
-        #                                                              scan2_data_example=scan_alpha_2, 
-        #                                                              scaling_factor = self.scaling_factor)
-        scan_xy, scan1, scan2 = convert_2_lidar.convert_scan_lidar( scan1_data_example=scan_alpha_1, 
-                                                                    scan2_data_example=scan_alpha_1, 
-                                                                    scaling_factor = 1,
-                                                                    lidar1_orient_deg = 0,
-                                                                    lidar2_orient_deg = 0,
-                                                                    agv_w=0,
-                                                                    agv_l=0)
-        # scan_xy = detect_gicp.remove_duplicate_points(scan_xy)
-        # print(scan_xy)
-        # print(scan_xy.shape)
-
-        # scan_xy, scan1, scan2 = convert_2_lidar.convert_scan_lidar(scan1_data_example=scan_alpha_3, 
-        #                                                             scan2_data_example=scan_alpha_3, 
-        #                                                             scaling_factor = 1,
-        #                                                             lidar1_orient_deg = 0,
-        #                                                             lidar2_orient_deg = 0,
-        #                                                             agv_w=0,
-        #                                                             agv_l=0)
-
-        # scan, _ = self.load_data_lidar()
-        # print("scan = ", scan, scan0.shape)
+            scan_xy, scan1, scan2 = convert_2_lidar.convert_scan_lidar( scan1_data_example=scan_alpha, 
+                                                                        scan2_data_example=scan_alpha, 
+                                                                        scaling_factor = 1,
+                                                                        lidar1_orient_deg = 0,
+                                                                        lidar2_orient_deg = 0,
+                                                                        agv_w=0,
+                                                                        agv_l=0)
 
         if self.kiem_tra_connect["process_lidar"] == "on":
-            # self.detect_data_driver.load_data_driver_motor = self.process_lidar.sent_data_driver_motor ###################################################
             # thêm map, quét map hay không
             self.set_data_process()
             # xử lý tín hiệu lidar icp
@@ -297,8 +282,6 @@ class support_main:
     def show_img(self):
         if self.kiem_tra_connect["process_lidar"] == "on":
             self.img = self.process_lidar.img2
-        
-        
         color_gray = (120, 120, 120)
         color_red = (0, 0, 255)
         color_green = (0, 255, 0)

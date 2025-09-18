@@ -527,12 +527,12 @@
         fetch('/get_agv_state')
             .then(response => response.json())
             .then(data => {
-                if (data.points_blue) {
-                    updateSpecialPoints(data.points_blue, 'blue', bluePointOverlays);
-                }
-                if (data.points_red) {
-                    updateSpecialPoints(data.points_red, 'red', redPointOverlays);
-                }
+                // if (data.points_blue) {
+                //    updateSpecialPoints(data.points_blue, 'blue', bluePointOverlays);
+                // }
+                // if (data.points_red) {
+                //     updateSpecialPoints(data.points_red, 'red', redPointOverlays);
+                // }
                 if (data.agv_body_coords && data.agv_arrow_coords) {
                     updateAGVOnMap(data.agv_body_coords, data.agv_arrow_coords);
                 }
